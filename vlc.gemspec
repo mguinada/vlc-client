@@ -14,4 +14,12 @@ Gem::Specification.new do |gem|
   gem.name          = "vlc"
   gem.require_paths = ["lib"]
   gem.version       = VLC::VERSION
+  gem.date          = Time.now.utc.strftime("%Y-%m-%d")
+
+  #development
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'simplecov'
+  gem.add_development_dependency 'pry'
+  gem.add_development_dependency 'yard'
+  gem.add_development_dependency 'maruku'
 end
