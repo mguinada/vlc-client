@@ -4,6 +4,7 @@ describe VLC::Client do
       vlc = VLC::Client.new
       vlc.should be_running
       vlc.should be_connected
+      vlc.stop
     end
 
     it 'can disregard VLC dedicated instance' do

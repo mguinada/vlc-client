@@ -20,6 +20,7 @@ module VLC
     #
     def initialize(options = {})
       process_options(options)
+      setup_traps
 
       if auto_start
         start
@@ -99,6 +100,12 @@ module VLC
       @port       = opts.fetch(:port, 9595)
       @auto_start = opts.fetch(:auto_start, true)
       @headless   = opts.fetch(:headless, true)
+    end
+
+    def setup_traps #not sure about possible side effects
+      trap("EXIT") { stop }
+      trap("INT")  { stop; exit }
+      trap("CLD")  { @process = nil }
     end
   end
 end
