@@ -16,6 +16,9 @@ Gem::Specification.new do |gem|
   gem.version       = VLC::VERSION
   gem.date          = Time.now.utc.strftime("%Y-%m-%d")
 
+  #package
+  gem.add_runtime_dependency     'retryable', '~> 1.3'
+
   #development
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'simplecov'

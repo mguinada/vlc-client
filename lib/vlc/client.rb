@@ -1,8 +1,13 @@
 require 'socket'
+require 'retryable'
 
 module VLC
   # The VLC client
   class Client
+    attr_reader :host,
+                :port,
+                :auto_start
+
     # Creates a connection to VLC media player
     #
     # @param [Boolean] started if true, object initialization will start
@@ -13,8 +18,13 @@ module VLC
     #
     # @raise [VLC::ConnectionRefused] if the connection fails
     #
-    def initialize(started = true)
-      start if started
+    def initialize(options = {})
+      process_options(options)
+
+      if auto_start
+        start
+        retryable(:tries => 3, :on => VLC::ConnectionRefused) { connect }
+      end
     end
 
     # Queries if VLC is running
@@ -34,7 +44,7 @@ module VLC
     #
     def start
       return nil if running?
-      @process = IO.popen('cvlc')
+      @process = IO.popen("#{@headless ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}")
       @process.pid
     end
 
@@ -48,7 +58,47 @@ module VLC
       Process.kill('KILL', pid = @process.pid)
       @process.close
       @process = nil
+      disconnect
       pid
+    end
+
+    # Connects to VLC RC interface on Client#host and Client#port
+    #
+    def connect
+      @socket = TCPSocket.new(@host, @port)
+      2.times { receive } #Clean the reading channel
+    rescue Errno::ECONNREFUSED => e
+      raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
+    end
+
+    # Disconects from VLC RC interface
+    #
+    def disconnect
+      @socket.close if connected?
+    end
+
+    # Queries if there is a connection to VLC RC interface
+    #
+    # @return [Boolean] true is connected, false otherwise
+    #
+    def connected?
+      not @socket.nil?
+    end
+
+    def headless?
+      @headless = true
+    end
+
+    private
+    def receive
+      @socket.gets.chomp
+    end
+
+    def process_options(opts)
+      @host       = opts.fetch(:host, 'localhost')
+      @port       = opts.fetch(:port, 9595)
+      @auto_start = opts.fetch(:auto_start, true)
+      @headless   = opts.fetch(:headless, true)
     end
   end
 end

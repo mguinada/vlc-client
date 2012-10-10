@@ -1,12 +1,13 @@
 describe VLC::Client do
   context 'initialization' do
-    it 'may happen on client construction' do
+    it 'starts a dedicated VLC instance by default' do
       vlc = VLC::Client.new
       vlc.should be_running
+      vlc.should be_connected
     end
 
-    it 'may be delegated for developer control' do
-      vlc = VLC::Client.new(false)
+    it 'can disregard VLC dedicated instance' do
+      vlc = VLC::Client.new(:auto_start => false)
       vlc.should_not be_running
 
       vlc.start.should_not be_nil
@@ -14,6 +15,19 @@ describe VLC::Client do
 
       vlc.stop.should_not be_nil
       vlc.should_not be_started
+      vlc.should_not be_connected
+    end
+
+    it 'is configurable' do
+      vlc = VLC::Client.new(:auto_start => false,
+                            :host => '192.168.1.10',
+                            :port => 9999,
+                            :headless => true)
+
+      vlc.should_not be_running
+      vlc.host.should eq('192.168.1.10')
+      vlc.port.should eq(9999)
+      vlc.should be_headless
     end
   end
 end
