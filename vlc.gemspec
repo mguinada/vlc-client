@@ -4,8 +4,8 @@ require File.expand_path('../lib/vlc-client/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Miguel Guinada"]
   gem.email         = ["mguinada@gmail.com"]
-  gem.description   = %q{vlc allows to control VLC media player over TCP}
-  gem.summary       = %q{vlc is a TCP client for VLC media player}
+  gem.description   = %q{vlc-client allows to control VLC media player over TCP}
+  gem.summary       = %q{vlc-client is a TCP client for VLC media player}
   gem.homepage      = "https://github.com/mguinada/vlc"
 
   gem.files         = `git ls-files`.split($\)
