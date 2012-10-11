@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path('../lib/vlc/version', __FILE__)
+require File.expand_path('../lib/vlc-client/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Miguel Guinada"]
@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = "vlc"
+  gem.name          = "vlc-client"
   gem.require_paths = ["lib"]
   gem.version       = VLC::VERSION
   gem.date          = Time.now.utc.strftime("%Y-%m-%d")
