@@ -1,6 +1,6 @@
-# vlc
+# vlc-client
 
-VLC manages a VLC media player through it's RC interface.
+vlc-client manages a VLC media player through it's RC interface.
 
 In it's default behaviour it will launch a VLC instance wrapped in a sub process and connect to
 it's RC interface. But VLC instance management may be bypassed. This is most usefull when controlling
@@ -12,7 +12,7 @@ a remote VLC instance or for fine grained control for the VLC media player lifec
 
 Add this line to your application's Gemfile:
 
-    gem 'vlc'
+    gem 'vlc-client'
 
 And then execute:
 
@@ -20,7 +20,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install vlc
+    $ gem install vlc-client
 
 ## Usage
 
@@ -47,7 +47,7 @@ vlc.running?
 
 ## Reference
 
-[reference](http://rdoc.info/github/mguinada/vlc)
+[reference](http://rdoc.info/github/mguinada/vlc-client)
 
 ## Contributing
 
@@ -66,4 +66,4 @@ vlc.running?
 Copyright (c) 2012 Miguel Guinada
 [LICENSE][] for details.
 
-[license]: https://github.com/mguinada/vlc/blob/master/LICENSE
+[license]: https://github.com/mguinada/vlc-client/blob/master/LICENSE
