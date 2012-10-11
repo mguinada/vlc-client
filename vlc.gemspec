@@ -17,12 +17,15 @@ Gem::Specification.new do |gem|
   gem.date          = Time.now.utc.strftime("%Y-%m-%d")
 
   #package
-  gem.add_runtime_dependency     'retryable', '~> 1.3'
+  gem.add_dependency             'retryable', '~> 1.3'
 
   #development
+  gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'yard'
-  gem.add_development_dependency 'maruku'
+  #gem.add_development_dependency 'maruku'
+  gem.add_development_dependency 'redcarpet'
+
 end

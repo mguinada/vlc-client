@@ -10,9 +10,11 @@ module VLC
 
     # Creates a connection to VLC media player
     #
-    # @param [Boolean] started if true, object initialization will start
-    #                   a VLC instance subprocess. If false VLS starting will be
-    #                   client code responsability
+    # @param [Hash] options
+    # @option options [String]  :host The host for the VLC RC interface to connect. Defaults to 'localhost'.
+    # @option options [Integer] :port The port for the VLC RC interface to connect. Defaults to 9595.
+    # @option options [Boolean] :auto_start 'true' to manage a dedicated instance of VLC. The default. 'false' otherwise.
+    # @option options [Integer] :headless 'true' to manage an headless (without GUI) instance of VLC, 'false' otherwaise. Defaults to 'true'.
     #
     # @return [VLC::VLC] a VLC client
     #
@@ -72,7 +74,7 @@ module VLC
       raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
     end
 
-    # Disconects from VLC RC interface
+    # Disconnects from VLC RC interface
     #
     def disconnect
       @socket.close if connected?
@@ -86,6 +88,8 @@ module VLC
       not @socket.nil?
     end
 
+    # Queries if the self managed VLC instance is headless
+    #
     def headless?
       @headless = true
     end

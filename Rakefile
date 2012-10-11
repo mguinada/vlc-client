@@ -13,7 +13,7 @@ end
 
 desc "Open an interactive session preloaded with this gem's code"
 task :console do
-  if false #gem_available?("pry")
+  if gem_available?("pry")
     sh "pry -I lib -r vlc.rb"
   else
     sh "irb -rubygems -I lib -r vlc.rb"
