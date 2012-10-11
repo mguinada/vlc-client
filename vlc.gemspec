@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["mguinada@gmail.com"]
   gem.description   = %q{vlc allows to control VLC media player over TCP}
   gem.summary       = %q{vlc is a TCP client for VLC media player}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/mguinada/vlc"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
