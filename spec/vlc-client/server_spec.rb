@@ -1,5 +1,8 @@
 describe VLC::Server do
-  let!(:server) { VLC::Server.new('localhost', 9595, true) }
+  let!(:server) do
+    mock_system_calls
+    server = VLC::Server.new('localhost', 9595, true)
+  end
   after(:each) { server.stop }
 
   it 'starts a VLC instance' do
