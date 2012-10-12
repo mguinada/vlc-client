@@ -38,8 +38,7 @@ module VLC
     #
     def stop
       return nil if not running?
-      Process.kill('KILL', pid = @process.pid)
-      @process.close
+      Process.kill('INT', pid = @process.pid)
       @process = nil
       pid
     end
