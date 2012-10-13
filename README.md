@@ -2,12 +2,6 @@
 
 vlc-client manages a VLC media player through it's RC interface.
 
-In it's default behaviour it will launch a VLC instance wrapped in a sub process and connect to
-it's RC interface. But VLC instance management may be bypassed. This is most usefull when controlling
-a remote VLC instance or for fine grained control for the VLC media player lifecycle.
-
-**NOTE**: This project is still in it's inception state
-
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -27,9 +21,10 @@ Or install it yourself as:
 ```ruby
 
 vlc = VLC::Client.new
-=> #<VLC::Client:0x00000000c21be0 @host="localhost", @port=9595, @auto_start=true, @headless=true, @process=#<IO:fd 5>, @socket=#<TCPSocket:fd 6>>
 
 vlc.play('http://example.org/media.mp3') #play media
+
+# to continue ...
 ```
 
 

@@ -2,7 +2,7 @@ describe VLC::Client::MediaControls do
   let(:vlc) { VLC::Client.new(:auto_start => false) }
   after(:each) { vlc.disconnect }
 
-  context 'palys media' do
+  context 'plays media' do
     it 'from filesystem' do
       mock_tcp_server.should_receive(:puts).once.with('add ./media.mp3')
       vlc.connect

@@ -10,7 +10,6 @@ module VLC
     end
 
     # Connects to VLC RC interface on Client#host and Client#port
-    #
     def connect
       @socket = TCPSocket.new(@host, @port)
       2.times { receive } #Clean the reading channel
@@ -27,7 +26,6 @@ module VLC
     end
 
     # Disconnects from VLC RC interface
-    #
     def disconnect
       @socket.close
       @socket = NullObject.new

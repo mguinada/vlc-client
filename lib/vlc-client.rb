@@ -46,13 +46,11 @@ module VLC
     end
 
     # Connects to VLC RC interface on Client#host and Client#port
-    #
     def connect
       @connection.connect
     end
 
     # Disconnects from VLC RC interface
-    #
     def disconnect
       @connection.disconnect
     end
@@ -66,7 +64,6 @@ module VLC
     end
 
     # Queries if the self managed VLC instance is headless
-    #
     def headless
       @server.headless?
     end

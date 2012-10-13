@@ -1,6 +1,5 @@
 module VLC
   # Manages a local VLC server in a child process
-  #
   class Server
     attr_reader   :host, :port
     attr_accessor :headless
@@ -8,6 +7,7 @@ module VLC
 
     def initialize(host, port, headless = false)
       @host, @port, @headless = host, port, headless
+      @process = NullObject.new
       setup_traps
     end
 
@@ -46,7 +46,7 @@ module VLC
     def stop
       return nil if not running?
       Process.kill('INT', pid = @process.pid)
-      @process = nil
+      @process = NullObject.new
       pid
     end
 

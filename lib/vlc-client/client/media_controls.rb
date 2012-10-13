@@ -11,14 +11,14 @@ module VLC
 
       private
       def media_arg(media)
-        media = case media
-                when File
-                  media.path
-                when String, URI
-                  media
-                else
-                  raise ArgumentError, "Can play: #{media}"
-                end
+        case media
+        when File
+          media.path
+        when String, URI
+          media
+        else
+          raise ArgumentError, "Can play: #{media}"
+        end
       end
     end
   end
