@@ -24,26 +24,14 @@ Or install it yourself as:
 
 ## Usage
 
-### Default behaviour: self managed VLC instance
-
 ```ruby
 
 vlc = VLC::Client.new
 => #<VLC::Client:0x00000000c21be0 @host="localhost", @port=9595, @auto_start=true, @headless=true, @process=#<IO:fd 5>, @socket=#<TCPSocket:fd 6>>
 
-vlc.running?
-=> true
+vlc.play('http://example.org/media.mp3') #play media
 ```
 
-### VLC instance management bypass
-
-```ruby
-vlc = VLC::Client.new(auto_start: false)
-=> #<VLC::Client:0x00000001a73f90 @auto_start=false, @headless=true, @host="localhost", @port=9595>
-
-vlc.running?
-=> false
-```
 
 ## Reference
 
