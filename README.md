@@ -1,4 +1,4 @@
-# vlc-client
+# vlc-client [![Build Status](https://secure.travis-ci.org/mguinada/vlc-client.png?branch=master)](http://travis-ci.org/mguinada/vlc-client)
 
 vlc-client manages a VLC media player through it's RC interface.
 

@@ -6,6 +6,7 @@ module VLC
   class Connection
     def initialize(host, port)
       @host, @port = host, port
+      @socket = NullObject.new
     end
 
     # Connects to VLC RC interface on Client#host and Client#port
@@ -28,14 +29,23 @@ module VLC
     # Disconnects from VLC RC interface
     #
     def disconnect
-      if connected?
-        @socket.close
-        @socket = nil
-      end
+      @socket.close
+      @socket = NullObject.new
+    end
+
+    alias :close :disconnect
+
+    # Writes the the TCP server socket
+    #
+    # @param data the data to write
+    #
+    def write(data)
+      @socket.puts(data)
     end
 
     private
     def receive
+      #TODO: Timeouts
       @socket.gets.chomp
     end
   end
