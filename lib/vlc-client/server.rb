@@ -1,6 +1,4 @@
 module VLC
-  # @private
-  #
   # Manages a local VLC server in a child process
   #
   class Server

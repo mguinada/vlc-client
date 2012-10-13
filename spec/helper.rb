@@ -27,7 +27,7 @@ module Mocks
     IO.stub(:popen).and_return do
       process = Class.new
 
-      process.should_receive(:pid).twice.and_return { 1 }
+      process.should_receive(:pid).at_least(:once).and_return { 1 }
       process
     end
 
