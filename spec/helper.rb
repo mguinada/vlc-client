@@ -10,8 +10,8 @@ require File.expand_path('../../lib/vlc-client', __FILE__)
 
 module Mocks
   def mock_tcp_server(opts = {})
+    tcp = double()
     TCPSocket.stub(:new).and_return do
-      tcp = double(Class.new)
       if opts.fetch(:defaults, true)
         tcp.should_receive(:gets).with(no_args).twice.and_return("")
         tcp.should_receive(:close).with(no_args)
@@ -20,6 +20,7 @@ module Mocks
       yield(tcp) if block_given?
       tcp
     end
+    tcp
   end
 
   def mock_system_calls

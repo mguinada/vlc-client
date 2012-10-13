@@ -6,6 +6,11 @@ module VLC
       # @param media [String, File, URI] the media
       #
       def play(media)
+        @connection.write("add #{media_arg(media)}")
+      end
+
+      private
+      def media_arg(media)
         media = case media
                 when File
                   media.path
@@ -14,8 +19,6 @@ module VLC
                 else
                   raise ArgumentError, "Can play: #{media}"
                 end
-
-        @connection.write("add #{media}")
       end
     end
   end

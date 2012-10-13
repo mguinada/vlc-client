@@ -32,5 +32,9 @@ describe VLC::Client do
     vlc.host.should eq('192.168.1.10')
     vlc.port.should eq(9999)
     vlc.should be_headless
+
+    #headless is the only interactive config property
+    vlc.headless = false
+    vlc.should_not be_headless
   end
 end
