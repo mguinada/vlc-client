@@ -3,17 +3,21 @@ require 'retryable'
 
 require 'vlc-client/version'
 
+require 'vlc-client/null_object'
 require 'vlc-client/server'
 require 'vlc-client/connection'
 require 'vlc-client/errors'
 
+require 'vlc-client/client/media_controls'
+
 module VLC
   # The VLC client
   class Client
-    attr_reader :host,
-                :port,
-                :auto_start,
-                :headless
+    include VLC::Client::MediaControls
+
+    attr_reader   :host,
+                  :port,
+                  :auto_start
 
     # Creates a connection to VLC media player
     #
@@ -30,7 +34,7 @@ module VLC
     def initialize(options = {})
       process_options(options)
 
-      @server = Server.new(host, port, headless)
+      @server = Server.new(host, port, options.fetch(:headless, true))
       @connection = Connection.new(host, port)
 
       if auto_start
@@ -90,8 +94,13 @@ module VLC
 
     # Queries if the self managed VLC instance is headless
     #
-    def headless?
-      @headless = true
+    def headless
+      @server.headless?
+    end
+    alias :headless? :headless
+
+    def headless=(value)
+      @server.headless = value
     end
 
     private
@@ -99,7 +108,6 @@ module VLC
       @host       = opts.fetch(:host, 'localhost')
       @port       = opts.fetch(:port, 9595)
       @auto_start = opts.fetch(:auto_start, true)
-      @headless   = opts.fetch(:headless, true)
     end
   end
 end

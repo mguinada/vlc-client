@@ -4,8 +4,9 @@ module VLC
   # Manages a local VLC server in a child process
   #
   class Server
-    attr_reader :host, :port, :headless
-    alias :headless? :headless
+    attr_reader   :host, :port
+    attr_accessor :headless
+    alias         :headless? :headless
 
     def initialize(host, port, headless = false)
       @host, @port, @headless = host, port, headless
