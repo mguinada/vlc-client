@@ -33,7 +33,7 @@ module VLC
     #                     as no effect (e.g. VLC already running)
     #
     def start
-      return nil if running?
+      return NullObject.new if running?
       @process = IO.popen("#{@headless ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}")
       @process.pid
     end
@@ -44,7 +44,7 @@ module VLC
     #                     as no effect (e.g. VLC not running)
     #
     def stop
-      return nil if not running?
+      return NullObject.new if not running?
       Process.kill('INT', pid = @process.pid)
       @process = NullObject.new
       pid
@@ -54,7 +54,7 @@ module VLC
     def setup_traps #not sure about possible side effects
       trap("EXIT") { stop }
       trap("INT")  { stop; exit }
-      trap("CLD")  { @process = nil }
+      trap("CLD")  { @process = NullObject.new }
     end
   end
 end
