@@ -10,7 +10,7 @@ describe VLC::Client::MediaControls do
       vlc.play('./media.mp3')
     end
 
-    it 'from filesystem' do
+    it 'from a file descriptor' do
       File.stub(:open).and_return {
         f = File.new('./LICENSE', 'r')
         f.should_receive(:path).once.and_return('./media.mp3')

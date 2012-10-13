@@ -1,6 +1,4 @@
 module VLC
-  # @private
-  #
   # Manages a local VLC server in a child process
   #
   class Server
@@ -20,6 +18,14 @@ module VLC
     def running?
       not @process.nil?
     end
+
+    alias :started? :running?
+
+    # Queries if VLC is stopped
+    #
+    # @return [Boolean] true is VLC is stopped, false otherwise
+    #
+    def stopped?; not running?; end
 
     # Starts a VLC instance in a subprocess
     #

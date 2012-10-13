@@ -23,15 +23,15 @@ module Mocks
     tcp
   end
 
-  def mock_system_calls
+  def mock_system_calls(opts = {})
     IO.stub(:popen).and_return do
       process = Class.new
 
-      process.should_receive(:pid).twice.and_return { 1 }
+      process.should_receive(:pid).at_least(:once).and_return { 1 }
       process
     end
 
-    Process.should_receive(:kill).once.with('INT', 1)
+    Process.should_receive(:kill).once.with('INT', 1) if opts.fetch(:kill, true)
   end
 
   def mock_sub_systems
