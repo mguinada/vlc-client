@@ -9,6 +9,24 @@ module VLC
         @connection.write("add #{media_arg(media)}")
       end
 
+      # Stops media currently playing
+      #
+      def stop
+        @connection.write("stop")
+      end
+
+      # Queries VLC if media is being played
+      #
+      def playing?
+        @connection.write("is_playing", false) == "1"
+      end
+
+      # Queries VLC if playback is currently stopped
+      #
+      def stopped?
+        @connection.write("is_playing", false) == "0"
+      end
+
       private
       def media_arg(media)
         case media

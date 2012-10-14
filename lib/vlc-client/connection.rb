@@ -12,7 +12,7 @@ module VLC
     # Connects to VLC RC interface on Client#host and Client#port
     def connect
       @socket = TCPSocket.new(@host, @port)
-      2.times { receive } #Clean the reading channel
+      2.times { read } #Clean the reading channel
     rescue Errno::ECONNREFUSED => e
       raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
     end
@@ -33,18 +33,41 @@ module VLC
 
     alias :close :disconnect
 
-    # Writes the the TCP server socket
+    # Writes data to the TCP server socket
     #
     # @param data the data to write
+    # @param fire_and_forget if true, no response response is expected from server,
+    #           when false, a response from the server will be returned.
     #
-    def write(data)
+    # @return the server response data if there is one
+    #
+    def write(data, fire_and_forget = true)
       @socket.puts(data)
+      @socket.flush
+
+      return true if fire_and_forget
+      read
     end
 
-    private
-    def receive
+    # Reads data from the TCP server
+    #
+    # @return [String] the data
+    #
+    def read
       #TODO: Timeouts
-      @socket.gets.chomp
+      raw_data = @socket.gets.chomp
+      #if raw =~ /^[>*\s*]*(.*)$/
+      #  $1
+      #if data = raw.match(/^[>*\s*]*(.*)$/)
+      if (data = process_data(raw_data))
+        data[1]
+      else
+        raise VLC::ProtocolError, "could not interpret the playload: #{raw_data}"
+      end
+    end
+
+    def process_data(data)
+      data.match(/^[>*\s*]*(.*)$/)
     end
   end
 end
