@@ -41,7 +41,6 @@ module VLC
 
         exec "#{@headless ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
       end
-      @pid
     end
 
     # Starts a VLC instance in a subprocess
