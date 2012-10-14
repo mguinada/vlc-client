@@ -7,7 +7,7 @@ module VLC
 
     def initialize(host, port, headless = false)
       @host, @port, @headless = host, port, headless
-      @process = NullObject.new
+      @pid = NullObject.new
       setup_traps
     end
 
@@ -16,7 +16,7 @@ module VLC
     # @return [Boolean] true is VLC is running, false otherwise
     #
     def running?
-      not @process.nil?
+      not @pid.nil?
     end
 
     alias :started? :running?
@@ -34,8 +34,14 @@ module VLC
     #
     def start
       return NullObject.new if running?
-      @process = IO.popen("#{@headless ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}")
-      @process.pid
+      @pid = Process.fork do
+        STDIN.reopen "/dev/null"
+        STDOUT.reopen "/dev/null", "a"
+        STDERR.reopen "/dev/null", "a"
+
+        exec "#{@headless ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
+      end
+      @pid
     end
 
     # Starts a VLC instance in a subprocess
@@ -45,16 +51,17 @@ module VLC
     #
     def stop
       return NullObject.new if not running?
-      Process.kill('INT', pid = @process.pid)
-      @process = NullObject.new
+
+      Process.kill('INT', pid = @pid)
+      @pid = NullObject.new
       pid
     end
 
     private
-    def setup_traps #not sure about possible side effects
+    def setup_traps
       trap("EXIT") { stop }
-      trap("INT")  { stop; exit }
-      trap("CLD")  { @process = NullObject.new }
+      trap("INT")  { stop }
+      trap("CLD")  { stop }
     end
   end
 end
