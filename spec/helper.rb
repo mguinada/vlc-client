@@ -13,7 +13,8 @@ module Mocks
     tcp = double()
     TCPSocket.stub(:new).and_return do
       if opts.fetch(:defaults, true)
-        tcp.should_receive(:gets).with(no_args).twice.and_return("")
+        tcp.should_receive(:gets).with(no_args).at_least(:twice).and_return("")
+        tcp.should_receive(:flush).with(no_args).any_number_of_times
         tcp.should_receive(:close).with(no_args)
       end
 

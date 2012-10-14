@@ -37,4 +37,49 @@ describe VLC::Client::MediaControls do
       expect { vlc.play(Class.new) }.to raise_error(ArgumentError)
     end
   end
+
+  context 'when playing media' do
+    before(:each) { vlc.play('http://example.org/media.mp3') }
+
+    it 'may stop playback' do
+      tcp = mock_tcp_server(:defaults => false)
+
+      tcp.should_receive(:flush).with(no_args).any_number_of_times
+      tcp.should_receive(:gets).with(no_args).twice.and_return("")
+
+      tcp.should_receive(:puts).once.with("stop")
+      tcp.should_receive(:puts).once.with('is_playing')
+      tcp.should_receive(:gets).once.with(no_args).and_return("0")
+
+      tcp.should_receive(:close).with(no_args)
+
+      vlc.connect
+
+      vlc.stop
+      vlc.should be_stopped
+    end
+  end
+
+  it 'is current status aware' do
+    tcp = mock_tcp_server(:defaults => false)
+    tcp.should_receive(:flush).with(no_args).any_number_of_times
+
+    tcp.should_receive(:gets).with(no_args).twice.and_return("")
+
+    tcp.should_receive(:puts).once.with('is_playing')
+    tcp.should_receive(:gets).once.with(no_args).and_return("> > 0")
+
+    tcp.should_receive(:puts).once.with('add http://example.org/media.mp3')
+
+    tcp.should_receive(:puts).once.with('is_playing')
+    tcp.should_receive(:gets).once.with(no_args).and_return("> > 1")
+
+    tcp.should_receive(:close).with(no_args)
+
+    vlc.connect
+
+    vlc.should be_stopped
+    vlc.play('http://example.org/media.mp3')
+    vlc.should be_playing
+  end
 end
