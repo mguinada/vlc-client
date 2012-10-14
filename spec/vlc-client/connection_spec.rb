@@ -1,4 +1,4 @@
-describe VLC::Connection do
+  describe VLC::Connection do
   context 'when disconnected' do
     #before(:each)    { mock_tcp_server }
     after(:each)     { connection.disconnect }
@@ -29,11 +29,37 @@ describe VLC::Connection do
       connection.should_not be_connected
     end
 
-    it 'writes to server' do
+    it 'writes data to server' do
       mock_tcp_server.should_receive(:puts).once.with('some data')
 
       connection.connect
       connection.write('some data')
+    end
+
+    it 'reads data from server' do
+      tcp = mock_tcp_server
+      tcp.should_receive(:puts).once.with('some data')
+      tcp.should_receive(:gets).once.and_return('some response data')
+
+      connection.connect
+      connection.write('some data', false)
+    end
+
+    it 'raises error on unreadable content' do
+      tcp = mock_tcp_server
+
+
+      #tcp.should_receive(:puts).once.with('some data')
+
+      #string = 'some response data'
+      #string.should_receive(:match).once.and_return(nil
+
+
+      #tcp.should_receive(:gets).once.and_return('some response data')
+      connection.should_receive(:process_data).once.and_return(nil)
+
+
+      expect { connection.write('some data', false) }.to raise_error(VLC::ProtocolError)
     end
   end
 end
