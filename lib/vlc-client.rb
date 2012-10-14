@@ -10,11 +10,13 @@ require 'vlc-client/connection'
 require 'vlc-client/errors'
 
 require 'vlc-client/client/media_controls'
+require 'vlc-client/client/connection_management'
 
 module VLC
   # The VLC client
   class Client
     include VLC::Client::MediaControls
+    include VLC::Client::ConnectionManagement
 
     attr_reader   :host,
                   :port,
@@ -43,24 +45,6 @@ module VLC
         @server.start
         retryable(:tries => 3, :on => VLC::ConnectionRefused) { connect }
       end
-    end
-
-    # Connects to VLC RC interface on Client#host and Client#port
-    def connect
-      @connection.connect
-    end
-
-    # Disconnects from VLC RC interface
-    def disconnect
-      @connection.disconnect
-    end
-
-    # Queries if there is a connection to VLC RC interface
-    #
-    # @return [Boolean] true is connected, false otherwise
-    #
-    def connected?
-      @connection.connected?
     end
 
     # Queries if the self managed VLC instance is headless
