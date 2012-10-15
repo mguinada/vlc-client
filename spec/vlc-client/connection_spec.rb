@@ -46,18 +46,8 @@
     end
 
     it 'raises error on unreadable content' do
-      tcp = mock_tcp_server
-
-
-      #tcp.should_receive(:puts).once.with('some data')
-
-      #string = 'some response data'
-      #string.should_receive(:match).once.and_return(nil
-
-
-      #tcp.should_receive(:gets).once.and_return('some response data')
+      mock_tcp_server
       connection.should_receive(:process_data).once.and_return(nil)
-
 
       expect { connection.write('some data', false) }.to raise_error(VLC::ProtocolError)
     end
