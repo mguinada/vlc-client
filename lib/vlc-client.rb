@@ -42,8 +42,13 @@ module VLC
       @connection = Connection.new(host, port)
 
       if auto_start
-        @server.start
-        retryable(:tries => 3, :on => VLC::ConnectionRefused) { connect }
+        begin
+          @server.start
+          retryable(:tries => 3, :on => VLC::ConnectionRefused) { connect }
+        rescue VLC::ConnectionRefused => e
+          @server.stop
+          raise e
+        end
       end
     end
 
