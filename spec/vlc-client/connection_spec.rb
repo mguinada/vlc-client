@@ -1,6 +1,5 @@
-  describe VLC::Connection do
+describe VLC::Connection do
   context 'when disconnected' do
-    #before(:each)    { mock_tcp_server }
     after(:each)     { connection.disconnect }
     let(:connection) { VLC::Connection.new('localhost', 9595) }
 

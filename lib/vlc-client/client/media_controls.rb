@@ -1,12 +1,26 @@
 module VLC
   class Client
     module MediaControls
-      # Plays media
+      # Plays media or resumes playback
       #
-      # @param media [String, File, URI] the media
+      # @overload play(media)
+      #   plays the given media
       #
-      def play(media)
-        @connection.write("add #{media_arg(media)}")
+      #   @param media [String, File, URI] the media to be played
+      #
+      #   @example
+      #     vlc.play('http://example.org/media.mp3')
+      #
+      # @overload play
+      #   plays the current media
+      #
+      #   @example
+      #      vlc.play('http://example.org/media.mp3')
+      #      vlc.stop
+      #      vlc.play #resume playback
+      #
+      def play(media = nil)
+        @connection.write(media.nil? ? "play" : "play #{media_arg(media)}")
       end
 
       # Stops media currently playing
