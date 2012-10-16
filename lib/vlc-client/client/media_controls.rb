@@ -35,6 +35,45 @@ module VLC
         @connection.write("stop")
       end
 
+      # Gets the title of the media at play
+      #
+      def title
+        @connection.write("get_title", false)
+      end
+
+      # Gets the current playback progress in time
+      #
+      # @return [Integer] time in seconds
+      #
+      def time
+        Integer(@connection.write("get_time", false))
+      rescue ArgumentError
+        0
+      end
+
+      # Gets the length of the media being played
+      #
+      # @return [Integer] time in seconds
+      #
+      def length
+        Integer(@connection.write("get_length", false))
+      rescue ArgumentError
+        0
+      end
+
+      # Get the progress of the the media being played
+      #
+      # @return [Integer] a relative value on percentage
+      #
+      def progress
+        case l = length
+        when 0
+          0
+        else
+          100 * time / l
+        end
+      end
+
       # Queries VLC if media is being played
       #
       def playing?

@@ -75,7 +75,6 @@ describe VLC::Client::MediaControls do
     it 'may pause playback' do
       tcp = tcp_mock
 
-
       tcp.should_receive(:puts).once.with('pause')
       tcp.should_receive(:puts).once.with('is_playing')
       tcp.should_receive(:gets).once.with(no_args).and_return("0")
@@ -103,9 +102,68 @@ describe VLC::Client::MediaControls do
       vlc.play
       vlc.should be_playing
     end
+
+    it 'displays the playing media title' do
+      tcp = tcp_mock
+      tcp.should_receive(:puts).once.with('get_title')
+      tcp.should_receive(:gets).once.and_return('test media')
+      tcp.should_receive(:puts).once.with('stop')
+      tcp.should_receive(:puts).once.with('get_title')
+      tcp.should_receive(:gets).once.and_return('')
+
+      vlc.connect
+      vlc.play('http://example.org/media.mp3')
+
+      vlc.title.should eq('test media')
+      vlc.stop
+
+      vlc.title.should be_empty
+    end
+
+    it 'is aware of track time' do
+      tcp = tcp_mock
+
+      tcp.should_receive(:puts).once.with('get_time')
+      tcp.should_receive(:gets).once.and_return('60')
+
+      vlc.connect
+      vlc.play('http://example.org/media.mp3')
+
+      vlc.time.should eq(60)
+    end
+
+    it 'is aware of track length' do
+      tcp = tcp_mock
+
+      tcp.should_receive(:puts).once.with('get_length')
+      tcp.should_receive(:gets).once.and_return('100')
+
+      vlc.connect
+      vlc.play('http://example.org/media.mp3')
+
+      vlc.length.should eq(100)
+    end
+
+    it 'is aware of track progress' do
+      vlc.stub(:length).and_return { 0 }
+      vlc.stub(:time).and_return { 100 }
+      vlc.progress.should eq(0)
+
+      vlc.stub(:length).and_return { 100 }
+      vlc.stub(:time).and_return { 0 }
+      vlc.progress.should eq(0)
+
+      vlc.stub(:length).and_return { 100 }
+      vlc.stub(:time).and_return { 10 }
+      vlc.progress.should eq(10)
+
+      vlc.stub(:length).and_return { 100 }
+      vlc.stub(:time).and_return { 100 }
+      vlc.progress.should eq(100)
+    end
   end
 
-  it 'is current status aware' do
+  it 'is aware of current status' do
     tcp = mock_tcp_server(:defaults => false)
     tcp.should_receive(:flush).with(no_args).any_number_of_times
 
