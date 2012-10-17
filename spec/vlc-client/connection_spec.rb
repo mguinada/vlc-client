@@ -1,8 +1,8 @@
 describe VLC::Connection do
-  context 'when disconnected' do
-    after(:each)     { connection.disconnect }
-    let(:connection) { VLC::Connection.new('localhost', 9595) }
+  after(:each)     { connection.disconnect }
+  let(:connection) { VLC::Connection.new('localhost', 9595) }
 
+  context 'when disconnected' do
     it 'connects to VLC server' do
       mock_tcp_server
 
@@ -17,9 +17,6 @@ describe VLC::Connection do
   end
 
   context 'when connected' do
-    after(:each) { connection.close }
-    let(:connection) { VLC::Connection.new('localhost', 9595) }
-
     it 'disconnects from a VLC server' do
       mock_tcp_server
       connection.connect
@@ -43,12 +40,30 @@ describe VLC::Connection do
       connection.connect
       connection.write('some data', false)
     end
+  end
 
-    it 'raises error on unreadable content' do
-      mock_tcp_server
+  context 'raises error on' do
+    it 'unreadable content' do
+      tcp = mock_tcp_server
+      tcp.should_receive(:puts).once.with('some data')
+      tcp.should_receive(:gets).once.and_return('some response data')
+
+      connection.connect
       connection.should_receive(:process_data).once.and_return(nil)
 
       expect { connection.write('some data', false) }.to raise_error(VLC::ProtocolError)
+    end
+
+    it 'broken pipe' do
+      mock_tcp_server.should_receive(:puts).with('something').and_raise(Errno::EPIPE)
+
+      connection.connect
+      expect { connection.write('something') }.to raise_error(VLC::BrokenConnectionError)
+    end
+
+    it 'write on a disconnected connection' do
+      connection.stub(:connected?).and_return(false)
+      expect { connection.write('something') }.to raise_error(VLC::NotConnectedError)
     end
   end
 end

@@ -20,25 +20,25 @@ module VLC
       #      vlc.play #resume playback
       #
       def play(media = nil)
-        @connection.write(media.nil? ? "play" : "add #{media_arg(media)}")
+        connection.write(media.nil? ? "play" : "add #{media_arg(media)}")
       end
 
       # Pauses playback
       #
       def pause
-        @connection.write("pause")
+        connection.write("pause")
       end
 
       # Stops media currently playing
       #
       def stop
-        @connection.write("stop")
+        connection.write("stop")
       end
 
       # Gets the title of the media at play
       #
       def title
-        @connection.write("get_title", false)
+        connection.write("get_title", false)
       end
 
       # Gets the current playback progress in time
@@ -46,7 +46,7 @@ module VLC
       # @return [Integer] time in seconds
       #
       def time
-        Integer(@connection.write("get_time", false))
+        Integer(connection.write("get_time", false))
       rescue ArgumentError
         0
       end
@@ -56,7 +56,7 @@ module VLC
       # @return [Integer] time in seconds
       #
       def length
-        Integer(@connection.write("get_length", false))
+        Integer(connection.write("get_length", false))
       rescue ArgumentError
         0
       end
@@ -66,24 +66,20 @@ module VLC
       # @return [Integer] a relative value on percentage
       #
       def progress
-        case l = length
-        when 0
-          0
-        else
-          100 * time / l
-        end
+        l = length
+        l.zero? ? 0 : 100 * time / l
       end
 
       # Queries VLC if media is being played
       #
       def playing?
-        @connection.write("is_playing", false) == "1"
+        connection.write("is_playing", false) == "1"
       end
 
       # Queries VLC if playback is currently stopped
       #
       def stopped?
-        @connection.write("is_playing", false) == "0"
+        connection.write("is_playing", false) == "0"
       end
 
       private

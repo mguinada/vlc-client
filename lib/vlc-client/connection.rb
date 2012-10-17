@@ -42,11 +42,14 @@ module VLC
     # @return the server response data if there is one
     #
     def write(data, fire_and_forget = true)
+      raise NotConnectedError, "no connection to server" unless connected?
       @socket.puts(data)
       @socket.flush
 
       return true if fire_and_forget
       read
+    rescue Errno::EPIPE
+      raise BrokenConnectionError, "the connection to the server is lost"
     end
 
     # Reads data from the TCP server
@@ -56,13 +59,10 @@ module VLC
     def read
       #TODO: Timeouts
       raw_data = @socket.gets.chomp
-      #if raw =~ /^[>*\s*]*(.*)$/
-      #  $1
-      #if data = raw.match(/^[>*\s*]*(.*)$/)
       if (data = process_data(raw_data))
         data[1]
       else
-        raise VLC::ProtocolError, "could not interpret the playload: #{raw_data}"
+        raise ProtocolError, "could not interpret the playload: #{raw_data}"
       end
     end
 

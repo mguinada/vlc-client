@@ -46,7 +46,7 @@ module VLC
       if auto_start
         begin
           @server.start
-          retryable(:tries => 3, :on => VLC::ConnectionRefused) { connect }
+          retryable(:tries => 5, :on => VLC::ConnectionRefused) { connect }
         rescue VLC::ConnectionRefused => e
           @server.stop
           raise e
@@ -65,6 +65,8 @@ module VLC
     end
 
     private
+    attr_reader :connection
+
     def process_options(opts)
       @host       = opts.fetch(:host, 'localhost')
       @port       = opts.fetch(:port, 9595)
