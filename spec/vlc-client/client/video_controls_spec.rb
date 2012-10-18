@@ -1,5 +1,5 @@
 describe VLC::Client::VideoControls do
-  let(:vlc) { VLC::Client.new(:auto_start => false) }
+  let(:vlc) { VLC::Client.new(:self_managed => false) }
   after(:each) { vlc.disconnect }
 
   context 'manipulate the screen size' do

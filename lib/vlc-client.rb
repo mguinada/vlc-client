@@ -23,14 +23,14 @@ module VLC
     attr_reader   :host,
                   :port,
                   :server,
-                  :auto_start
+                  :self_managed
 
     # Creates a connection to VLC media player
     #
     # @param [Hash] options
     # @option options [String]  :host The host for the VLC RC interface to connect. Defaults to 'localhost'.
     # @option options [Integer] :port The port for the VLC RC interface to connect. Defaults to 9595.
-    # @option options [Boolean] :auto_start 'true' to manage a dedicated instance of VLC. The default. 'false' otherwise.
+    # @option options [Boolean] :self_managed 'true' to manage a dedicated instance of VLC. The default. 'false' otherwise.
     # @option options [Integer] :headless 'true' to manage an headless (without GUI) instance of VLC, 'false' otherwaise. Defaults to 'true'.
     #
     # @return [VLC::VLC] a VLC client
@@ -43,7 +43,7 @@ module VLC
       @server = Server.new(host, port, options.fetch(:headless, false))
       @connection = Connection.new(host, port)
 
-      if auto_start
+      if self_managed
         begin
           @server.start
           retryable(:tries => 5, :on => VLC::ConnectionRefused) { connect }
@@ -68,9 +68,9 @@ module VLC
     attr_reader :connection
 
     def process_options(opts)
-      @host       = opts.fetch(:host, 'localhost')
-      @port       = opts.fetch(:port, 9595)
-      @auto_start = opts.fetch(:auto_start, true)
+      @host         = opts.fetch(:host, 'localhost')
+      @port         = opts.fetch(:port, 9595)
+      @self_managed = opts.fetch(:self_managed, true)
     end
   end
 end

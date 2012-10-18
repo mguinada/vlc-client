@@ -3,7 +3,7 @@ describe VLC::Client do
     before(:each) { mock_sub_systems }
 
     it 'starts a dedicated VLC instance by default' do
-      vlc = VLC::Client.new
+      vlc = VLC::Client.new(:self_managed => true)
       vlc.server.should be_running
       vlc.should be_connected #auto-connect
 
@@ -12,7 +12,7 @@ describe VLC::Client do
     end
 
     it 'can disregard VLC dedicated instance' do
-      vlc = VLC::Client.new(:auto_start => false)
+      vlc = VLC::Client.new(:self_managed => false)
       vlc.server.should_not be_running
 
       vlc.server.start.should_not be_nil
@@ -26,11 +26,11 @@ describe VLC::Client do
 
   it 'contains an embedded VLC server' do
     mock_system_calls(:kill => false)
-    VLC::Client.new(:auto_start => false).server.should be_a(VLC::Server)
+    VLC::Client.new(:self_managed => false).server.should be_a(VLC::Server)
   end
 
   it 'is configurable' do
-    vlc = VLC::Client.new(:auto_start => false,
+    vlc = VLC::Client.new(:self_managed => false,
                           :host => '192.168.1.10',
                           :port => 9999,
                           :headless => true)

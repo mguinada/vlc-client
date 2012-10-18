@@ -1,5 +1,5 @@
 describe VLC::Client::ConnectionManagement do
-  let(:vlc) { VLC::Client.new(:auto_start => false) }
+  let(:vlc) { VLC::Client.new(:self_managed => false) }
   before(:each) { mock_tcp_server }
   after(:each) { vlc.disconnect }
 
