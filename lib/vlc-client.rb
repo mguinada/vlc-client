@@ -40,7 +40,7 @@ module VLC
     def initialize(options = {})
       process_options(options)
 
-      @server = Server.new(host, port, options.fetch(:headless, true))
+      @server = Server.new(host, port, options.fetch(:headless, false))
       @connection = Connection.new(host, port)
 
       if auto_start
