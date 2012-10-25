@@ -4,6 +4,8 @@ module VLC
   # Manages the connection to a VLC server
   #
   class Connection
+    attr_accessor :host, :port
+
     def initialize(host, port)
       @host, @port = host, port
       @socket = NullObject.new
@@ -13,6 +15,7 @@ module VLC
     def connect
       @socket = TCPSocket.new(@host, @port)
       2.times { read } #Clean the reading channel
+      true
     rescue Errno::ECONNREFUSED => e
       raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
     end
@@ -49,6 +52,7 @@ module VLC
       return true if fire_and_forget
       read
     rescue Errno::EPIPE
+      disconnect
       raise BrokenConnectionError, "the connection to the server is lost"
     end
 
