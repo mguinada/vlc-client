@@ -44,6 +44,7 @@ module VLC
     #   @param [Server] server a VLC server lifecycle manager
     #   @param [Hash] options
     #   @option options [Boolean] :auto_start When false, the server lifecycle is not managed automatically and controll is passed to the developer
+    #   @option options [Integer] :conn_retries Number of connection retries (each separated by a second) to make on auto-connect. Defaults to 5.
     #
     #   @example
     #     vlc = VLC::Client.new(VLC::Server.new)
@@ -64,24 +65,26 @@ module VLC
 
       process_args(args)
       @connection = Connection.new(host, port)
+      bind_server(server, options) unless server.nil?
+    end
 
-      unless server.nil?
-        @connection.host = server.host
-        @connection.port = server.port
+    private
+    attr_reader :connection
+
+    def bind_server(server, options = {})
+      @connection.host = server.host
+      @connection.port = server.port
+
+      if options.fetch(:auto_start, true)
         begin
-          if options.fetch(:auto_start, true)
-            @server.start
-            retryable(:tries => 5, :on => VLC::ConnectionRefused) { connect }
-          end
+          @server.start
+          retryable(:tries => options.fetch(:conn_retries, 5), :on => VLC::ConnectionRefused) { connect }
         rescue VLC::ConnectionRefused => e
           @server.stop
           raise e
         end
       end
     end
-
-    private
-    attr_reader :connection
 
     def process_args(args)
       case args.size

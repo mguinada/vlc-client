@@ -1,6 +1,6 @@
 # vlc-client [![Build Status](https://secure.travis-ci.org/mguinada/vlc-client.png?branch=master)](http://travis-ci.org/mguinada/vlc-client)
 
-vlc-client manages a VLC media player through it's RC interface.
+vlc-client manages a [VLC media player](http://www.videolan.org/vlc/) through it's RC interface.
 
 ## Installation
 
@@ -22,7 +22,10 @@ Or install it yourself as:
 
 ```ruby
 
-vlc = VLC::Client.new('192.168.1.10', 9999) #Expects a VLC server running on 192.168.1.10:9999
+#Expects a VLC media player running on 192.168.1.10:9999
+#e.g. vlc --extraintf rc --rc-host 192.168.1.10:9999"
+
+vlc = VLC::Client.new('192.168.1.10', 9999)
 # => "#<VLC::Client:0x0000000229c370 @server=#<VLC::Server:0x0000000229c6e0 @headless=false, @port=9999, @host=\"192.168.1.10\", @pid=10514>, @self_managed=true, @connection=#<VLC::Connection:0x0000000229c258 @port=9999, @host=\"192.168.1.10\", @socket=#<TCPSocket:fd 5>>>"
 
 vlc.connect
@@ -79,6 +82,11 @@ vlc.connect
 ## Reference
 
 [reference](http://rdoc.info/github/mguinada/vlc-client)
+
+## Support
+
+vlc-client has been tested on linux only.
+If you need support for other OS a pull request is welcome.
 
 ## Contributing
 

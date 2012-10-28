@@ -11,6 +11,7 @@ module VLC
     #   @param [Integer] port the port
     #   @param [Hash] options
     #   @option options [Boolean] :auto_start When false, the server lifecycle is not managed automatically and controll is passed to the developer
+    #   @option options [Integer] :conn_retries Number of connection retries (each separated by a second) to make on auto-connect. Defaults to 5.
     #
     #   @example
     #     vlc = VLC::System.new('10.10.0.10', 9000)
