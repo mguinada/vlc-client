@@ -15,9 +15,9 @@ module VLC
       #   plays the current media or resume playback is paused
       #
       #   @example
-      #      vlc.play('http://example.org/media.mp3')
-      #      vlc.pause
-      #      vlc.play #resume playback
+      #     vlc.play('http://example.org/media.mp3')
+      #     vlc.pause
+      #     vlc.play #resume playback
       #
       def play(media = nil)
         connection.write(media.nil? ? "play" : "add #{media_arg(media)}")

@@ -1,11 +1,18 @@
 module VLC
   # Manages a local VLC server in a child process
   class Server
-    attr_reader   :host, :port
-    attr_accessor :headless
+    attr_accessor :host, :port, :headless
     alias         :headless? :headless
 
-    def initialize(host, port, headless = false)
+    #
+    # Creates a VLC server lifecycle manager
+    #
+    # @param [String] host The ip to bind to
+    # @param [Integer] port the port
+    # @param [Boolean] headless if true VLC media player will run headless.
+    #                   i.e. without a graphical interface. Defaults to false
+    #
+    def initialize(host = 'localhost', port = 9595, headless = false)
       @host, @port, @headless = host, port, headless
       @pid = NullObject.new
       setup_traps
@@ -39,7 +46,7 @@ module VLC
         STDOUT.reopen "/dev/null", "a"
         STDERR.reopen "/dev/null", "a"
 
-        exec "#{@headless ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
+        exec "#{headless? ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
       end
     end
 
