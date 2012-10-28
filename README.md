@@ -31,11 +31,11 @@ vlc = VLC::Client.new('192.168.1.10', 9999)
 vlc.connect
 # => true
 vlc.play('http://example.org/media.mp3') #play media
-=> true
+# => true
 vlc.playing?
-=> true
+# => true
 vlc.fullscreen
-=> true
+# => true
 #...
 
 ```
@@ -49,13 +49,13 @@ vlc = VLC::System.new #A local VLC client/server system where a local VLC server
 # => "#<VLC::System:0x00000001bbb1a0 @client=#<VLC::Client:0x00000001bbade0 @server=#<VLC::Server:0x00000001bbb178 @headless=false, @port=9595, @host=\"localhost\", @pid=11225>, @connection=#<VLC::Connection:0x00000001bbacc8 @port=9595, @host=\"localhost\", @socket=#<TCPSocket:fd 5>>>>"
 
 vlc.connected? #auto_connect
-=> true
+# => true
 
 vlc.play('http://example.org/media.mp3')
-=> true
+# => true
 
 vlc.progress
-=> 1 #%
+# => 1 #%
 #...
 
 #Technically this the same as
@@ -69,7 +69,7 @@ _(requires a local installation of VLC media player)_
 ```ruby
 
 vlc = VLC::System.new('127.0.0.1', 9999, auto_start: false)
-=> "#<VLC::System:0x00000001695f68 @client=#<VLC::Client:0x0000000169d718 @server=#<VLC::Server:0x00000001695ec8 @headless=false, @port=9999, @host=\"127.0.0.1\", @pid=VLC::NullObject>, @connection=#<VLC::Connection:0x0000000169d588 @port=9999, @host=\"127.0.0.1\", @socket=VLC::NullObject>>>"
+# => "#<VLC::System:0x00000001695f68 @client=#<VLC::Client:0x0000000169d718 @server=#<VLC::Server:0x00000001695ec8 @headless=false, @port=9999, @host=\"127.0.0.1\", @pid=VLC::NullObject>, @connection=#<VLC::Connection:0x0000000169d588 @port=9999, @host=\"127.0.0.1\", @socket=VLC::NullObject>>>"
 
 vlc.server.running?
 # => false
