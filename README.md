@@ -37,7 +37,8 @@ vlc.fullscreen
 
 ```
 
-### Create a self managed client/server system. This requires a local installation of VLC media mplayer
+### Create a self managed client/server system.
+_(requires a local installation of VLC media player)_
 
 ```ruby
 
@@ -54,11 +55,16 @@ vlc.progress
 => 1 #%
 #...
 
-#In practice this is like
+#Technically this the same as
 vlc = VLC::Client.new(VLC::Server.new('localhost', 9595, false))
 # => "#<VLC::Client:0x000000011de128 @server=#<VLC::Server:0x000000011de380 @headless=false, @port=9595, @host=\"localhost\", @pid=12656>, @connection=#<VLC::Connection:0x000000011de038 @port=9595, @host=\"localhost\", @socket=#<TCPSocket:fd 5>>>"
+```
 
-#Gain control of local VLC server lifecycle management
+###Get local VLC server lifecycle management control
+_(requires a local installation of VLC media player)_
+
+```ruby
+
 vlc = VLC::System.new('127.0.0.1', 9999, auto_start: false)
 => "#<VLC::System:0x00000001695f68 @client=#<VLC::Client:0x0000000169d718 @server=#<VLC::Server:0x00000001695ec8 @headless=false, @port=9999, @host=\"127.0.0.1\", @pid=VLC::NullObject>, @connection=#<VLC::Connection:0x0000000169d588 @port=9999, @host=\"127.0.0.1\", @socket=VLC::NullObject>>>"
 
