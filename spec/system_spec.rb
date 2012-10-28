@@ -16,7 +16,7 @@ describe VLC::System do
   end
 
   it 'handles server lifecycle management to client code' do
-    vlc = VLC::System.new('127.0.0.1', 9999, auto_start: false)
+    vlc = VLC::System.new('127.0.0.1', 9999, :auto_start => false)
 
     vlc.server.should_not be_running
     vlc.server.host.should eq('127.0.0.1')
