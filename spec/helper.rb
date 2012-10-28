@@ -15,7 +15,7 @@ module Mocks
       if opts.fetch(:defaults, true)
         tcp.should_receive(:gets).with(no_args).at_least(:twice).and_return("")
         tcp.should_receive(:flush).with(no_args).any_number_of_times
-        tcp.should_receive(:close).with(no_args)
+        tcp.should_receive(:close).with(no_args) if opts.fetch(:close, true)
       end
 
       yield(tcp) if block_given?

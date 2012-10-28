@@ -59,6 +59,7 @@ describe VLC::Connection do
 
       connection.connect
       expect { connection.write('something') }.to raise_error(VLC::BrokenConnectionError)
+      connection.should_not be_connected
     end
 
     it 'write on a disconnected connection' do

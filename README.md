@@ -18,15 +18,63 @@ Or install it yourself as:
 
 ## Usage
 
+### Create a client and connect to a running VLC media play instance.
+
 ```ruby
 
-vlc = VLC::Client.new
+vlc = VLC::Client.new('192.168.1.10', 9999) #Expects a VLC server running on 192.168.1.10:9999
+# => "#<VLC::Client:0x0000000229c370 @server=#<VLC::Server:0x0000000229c6e0 @headless=false, @port=9999, @host=\"192.168.1.10\", @pid=10514>, @self_managed=true, @connection=#<VLC::Connection:0x0000000229c258 @port=9999, @host=\"192.168.1.10\", @socket=#<TCPSocket:fd 5>>>"
 
+vlc.connect
+# => true
 vlc.play('http://example.org/media.mp3') #play media
+=> true
+vlc.playing?
+=> true
+vlc.fullscreen
+=> true
+#...
 
-# to continue ...
 ```
 
+### Create a self managed client/server system.
+_(requires a local installation of VLC media player)_
+
+```ruby
+
+vlc = VLC::System.new #A local VLC client/server system where a local VLC server is automaticaly managed
+# => "#<VLC::System:0x00000001bbb1a0 @client=#<VLC::Client:0x00000001bbade0 @server=#<VLC::Server:0x00000001bbb178 @headless=false, @port=9595, @host=\"localhost\", @pid=11225>, @connection=#<VLC::Connection:0x00000001bbacc8 @port=9595, @host=\"localhost\", @socket=#<TCPSocket:fd 5>>>>"
+
+vlc.connected? #auto_connect
+=> true
+
+vlc.play('http://example.org/media.mp3')
+=> true
+
+vlc.progress
+=> 1 #%
+#...
+
+#Technically this the same as
+vlc = VLC::Client.new(VLC::Server.new('localhost', 9595, false))
+# => "#<VLC::Client:0x000000011de128 @server=#<VLC::Server:0x000000011de380 @headless=false, @port=9595, @host=\"localhost\", @pid=12656>, @connection=#<VLC::Connection:0x000000011de038 @port=9595, @host=\"localhost\", @socket=#<TCPSocket:fd 5>>>"
+```
+
+###Get local VLC server lifecycle management control
+_(requires a local installation of VLC media player)_
+
+```ruby
+
+vlc = VLC::System.new('127.0.0.1', 9999, auto_start: false)
+=> "#<VLC::System:0x00000001695f68 @client=#<VLC::Client:0x0000000169d718 @server=#<VLC::Server:0x00000001695ec8 @headless=false, @port=9999, @host=\"127.0.0.1\", @pid=VLC::NullObject>, @connection=#<VLC::Connection:0x0000000169d588 @port=9999, @host=\"127.0.0.1\", @socket=VLC::NullObject>>>"
+
+vlc.server.running?
+# => false
+vlc.server.start
+# => 12672
+vlc.connect
+# => true
+```
 
 ## Reference
 
