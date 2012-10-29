@@ -1,12 +1,9 @@
-require 'uri'
-require 'socket'
 require 'retryable'
 
-require 'vlc-client/version'
-
 require 'vlc-client/null_object'
-
 require 'vlc-client/core_ext/array'
+
+require 'vlc-client/version'
 
 require 'vlc-client/server'
 require 'vlc-client/connection'
@@ -49,11 +46,12 @@ module VLC
     #   @example
     #     vlc = VLC::Client.new(VLC::Server.new)
     #     vlc.server.started?
-    #     => true
+    #     #=> true
     #
+    #   @example
     #     vlc = VLC::Client.new(VLC::Server.new, auto_start: false)
     #     vlc.server.started?
-    #     => false
+    #     #=> false
     #
     # @return [VLC::VLC] a VLC client
     #
@@ -68,7 +66,7 @@ module VLC
       bind_server(server, options) unless server.nil?
     end
 
-    private
+  private
     attr_reader :connection
 
     def bind_server(server, options = {})

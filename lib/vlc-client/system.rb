@@ -10,6 +10,7 @@ module VLC
     #   @param [String] host The ip to connect to
     #   @param [Integer] port the port
     #   @param [Hash] options
+    #   @option options [Boolean] :headless If true VLC run in headless mode. i.e. without a graphical interface. Defaults to false.
     #   @option options [Boolean] :auto_start When false, the server lifecycle is not managed automatically and controll is passed to the developer
     #   @option options [Integer] :conn_retries Number of connection retries (each separated by a second) to make on auto-connect. Defaults to 5.
     #

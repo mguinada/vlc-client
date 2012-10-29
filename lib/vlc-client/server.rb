@@ -9,7 +9,7 @@ module VLC
     #
     # @param [String] host The ip to bind to
     # @param [Integer] port the port
-    # @param [Boolean] headless if true VLC media player will run headless.
+    # @param [Boolean] headless if true VLC media player will run in headless mode.
     #                   i.e. without a graphical interface. Defaults to false
     #
     def initialize(host = 'localhost', port = 9595, headless = false)
@@ -63,7 +63,7 @@ module VLC
       pid
     end
 
-    private
+  private
     def setup_traps
       trap("EXIT") { stop }
       trap("INT")  { stop }

@@ -1,5 +1,6 @@
+require 'socket'
+
 module VLC
-  #@ private
   #
   # Manages the connection to a VLC server
   #

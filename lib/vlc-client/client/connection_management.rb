@@ -12,7 +12,6 @@ module VLC
       end
 
       # Queries if there is an active connection to VLC RC interface
-      #
       def connected?
         connection.connected?
       end

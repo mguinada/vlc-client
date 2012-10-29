@@ -1,3 +1,5 @@
+require 'uri'
+
 module VLC
   class Client
     module MediaControls
@@ -24,19 +26,16 @@ module VLC
       end
 
       # Pauses playback
-      #
       def pause
         connection.write("pause")
       end
 
       # Stops media currently playing
-      #
       def stop
         connection.write("stop")
       end
 
       # Gets the title of the media at play
-      #
       def title
         connection.write("get_title", false)
       end
@@ -71,18 +70,16 @@ module VLC
       end
 
       # Queries VLC if media is being played
-      #
       def playing?
         connection.write("is_playing", false) == "1"
       end
 
       # Queries VLC if playback is currently stopped
-      #
       def stopped?
         connection.write("is_playing", false) == "0"
       end
 
-      private
+    private
       def media_arg(media)
         case media
         when File
