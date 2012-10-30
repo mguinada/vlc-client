@@ -15,7 +15,7 @@ module VLC
     def initialize(host = 'localhost', port = 9595, headless = false)
       @host, @port, @headless = host, port, headless
       @pid = NullObject.new
-      setup_traps
+      @deamon = false
     end
 
     # Queries if VLC is running
@@ -36,18 +36,58 @@ module VLC
 
     # Starts a VLC instance in a subprocess
     #
+    # @param [Boolean] detached if true VLC will be started as a deamon process.
+    #                     Defaults to false.
+    #
     # @return [Integer] the subprocess PID or nil if the start command
     #                     as no effect (e.g. VLC already running)
     #
-    def start
-      return NullObject.new if running?
-      @pid = Process.fork do
+    def start(detached = false)
+      return @pid if running?
+      rd, wr = IO.pipe
+
+      detached ? @deamon = true : setup_traps
+      if Process.fork #parent
+        wr.close
+        @pid = rd.read.to_i
+        rd.close
+        return @pid
+      else            #child
+        rd.close
+        if detached
+          if RUBY_VERSION < "1.9"
+            Process.setsid
+            exit if Process.fork
+            Dir.chdir "/"
+          else
+            Process.daemon
+          end
+        end
+        wr.write(Process.pid)
+        wr.close
+
         STDIN.reopen "/dev/null"
         STDOUT.reopen "/dev/null", "a"
         STDERR.reopen "/dev/null", "a"
 
-        exec "#{headless? ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
+        Kernel.exec "#{headless? ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
       end
+    end
+
+    # Start a VLC instance as a system deamon
+    #
+    # @see #start
+    #
+    # @return [Integer] the subprocess PID or nil if the start command
+    #                     as no effect (e.g. VLC already running)
+    #
+    def daemonize
+      start(true)
+    end
+
+    # Queries if VLC is running in daemonized mode
+    def daemonized?
+      @deamon == true
     end
 
     # Starts a VLC instance in a subprocess
@@ -67,7 +107,7 @@ module VLC
     def setup_traps
       trap("EXIT") { stop }
       trap("INT")  { stop }
-      trap("CLD")  { stop }
+      trap("CLD")  { @pid = NullObject.new }
     end
   end
 end

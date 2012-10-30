@@ -14,7 +14,7 @@ describe VLC::Client do
       vlc.port.should eq(9999)
     end
 
-    it 'is self managed if server is given' do
+    it 'is self managed if a server is given' do
       mock_system_calls(:kill => false)
 
       vlc = VLC::Client.new(VLC::Server.new('10.0.0.1', 9999))
