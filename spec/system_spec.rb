@@ -28,11 +28,11 @@ describe VLC::System do
     vlc.server.port.should eq(9999)
   end
 
-  it 'runs server as daemon process' do
+  it 'runs server as a daemon process' do
     mock_system_calls(:kill => false, :daemonized => true)
     mock_tcp_server(:close => false)
 
-    vlc = VLC::System.new(:deamonize => true)
+    vlc = VLC::System.new(:daemonize => true)
     vlc.server.should be_daemonized
   end
 end

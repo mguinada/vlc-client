@@ -13,7 +13,7 @@ module VLC
     #   @option options [Boolean] :headless If true VLC run in headless mode. i.e. without a graphical interface. Defaults to false.
     #   @option options [Boolean] :auto_start When false, the server lifecycle is not managed automatically and controll is passed to the developer
     #   @option options [Integer] :conn_retries Number of connection retries (each separated by a second) to make on auto-connect. Defaults to 5.
-    #   @option options [Boolean] :deamonize When true and only when on server auto-start mode, the server will be detached and run as a daemon process. Defaults to false.
+    #   @option options [Boolean] :daemonize When true and only when on server auto-start mode, the server will be detached and run as a daemon process. Defaults to false.
     #
     #   @example
     #     vlc = VLC::System.new('10.10.0.10', 9000)
