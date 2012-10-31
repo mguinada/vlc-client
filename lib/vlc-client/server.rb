@@ -42,27 +42,23 @@ module VLC
     # @return [Integer] the subprocess PID or nil if the start command
     #                     as no effect (e.g. VLC already running)
     #
+    # @see #daemonize
+    #
     def start(detached = false)
       return @pid if running?
       rd, wr = IO.pipe
 
       detached ? @deamon = true : setup_traps
-      if Process.fork #parent
+      if Process.fork      #parent
         wr.close
         @pid = rd.read.to_i
         rd.close
         return @pid
-      else            #child
+      else                 #child
         rd.close
-        if detached
-          if RUBY_VERSION < "1.9"
-            Process.setsid
-            exit if Process.fork
-            Dir.chdir "/"
-          else
-            Process.daemon
-          end
-        end
+
+        detach if detached #daemonization
+
         wr.write(Process.pid)
         wr.close
 
@@ -76,16 +72,19 @@ module VLC
 
     # Start a VLC instance as a system deamon
     #
-    # @see #start
     #
     # @return [Integer] the subprocess PID or nil if the start command
     #                     as no effect (e.g. VLC already running)
+    # @see Server#start
     #
     def daemonize
       start(true)
     end
 
     # Queries if VLC is running in daemonized mode
+    #
+    # @see #daemonize
+    #
     def daemonized?
       @deamon == true
     end
@@ -108,6 +107,16 @@ module VLC
       trap("EXIT") { stop }
       trap("INT")  { stop }
       trap("CLD")  { @pid = NullObject.new }
+    end
+
+    def detach
+     if RUBY_VERSION < "1.9"
+        Process.setsid
+        exit if Process.fork
+        Dir.chdir "/"
+      else
+        Process.daemon
+      end
     end
   end
 end
