@@ -79,6 +79,27 @@ module VLC
         connection.write("is_playing", false) == "0"
       end
 
+      # Queries/Sets VLC volume level
+      #
+      # @overload volume()
+      #
+      #   @return [Integer] the current volume level
+      #
+      # @overload volume(level)
+      #
+      #   @param [Integer] level the volume level to set
+      #
+      def volume(level = nil)
+        level.nil? ? Integer(connection.write("volume", false)) : connection.write("volume #{Integer(level)}")
+      rescue ArgumentError
+        level.nil? ? 0 : nil
+      end
+
+      # @see #volume
+      def volume=(level)
+        volume(level)
+      end
+
     private
       def media_arg(media)
         case media

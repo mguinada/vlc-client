@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install vlc-client
+    $ gem install vlc-client --pre
 
 ## Usage
 

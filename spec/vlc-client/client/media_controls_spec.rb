@@ -120,6 +120,31 @@ describe VLC::Client::MediaControls do
       vlc.title.should be_empty
     end
 
+    it 'reads the volume level' do
+      tcp = tcp_mock
+
+      tcp.should_receive(:puts).once.with('volume')
+      tcp.should_receive(:gets).once.and_return('100')
+
+      vlc.connect
+      vlc.play('http://example.org/media.mp3')
+      vlc.volume.should eq(100)
+    end
+
+    it 'sets the volume level' do
+      tcp = tcp_mock
+
+      tcp.should_receive(:puts).once.with('volume 150')
+      tcp.should_receive(:puts).once.with('volume')
+      tcp.should_receive(:gets).once.and_return('150')
+
+      vlc.connect
+      vlc.play('http://example.org/media.mp3')
+      vlc.volume = 150
+
+      vlc.volume.should eq(150)
+    end
+
     it 'is aware of track time' do
       tcp = tcp_mock
 
