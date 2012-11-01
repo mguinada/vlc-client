@@ -39,8 +39,7 @@ module VLC
     # @param [Boolean] detached if true VLC will be started as a deamon process.
     #                     Defaults to false.
     #
-    # @return [Integer] the subprocess PID or nil if the start command
-    #                     as no effect (e.g. VLC already running)
+    # @return [Integer] the subprocess PID
     #
     # @see #daemonize
     #
@@ -95,7 +94,7 @@ module VLC
     #                     as no effect (e.g. VLC not running)
     #
     def stop
-      return NullObject.new if not running?
+      return nil if not running?
 
       Process.kill('INT', pid = @pid)
       @pid = NullObject.new
