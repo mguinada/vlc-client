@@ -99,6 +99,7 @@ module VLC
 
       Process.kill('INT', pid = @pid)
       @pid = NullObject.new
+      @deamon = false
       pid
     end
 
@@ -106,7 +107,7 @@ module VLC
     def setup_traps
       trap("EXIT") { stop }
       trap("INT")  { stop }
-      trap("CLD")  { @pid = NullObject.new }
+      trap("CLD")  { @pid = NullObject.new; @deamon = false }
     end
 
     def detach
