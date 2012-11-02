@@ -85,10 +85,12 @@ vlc.connect
 
 [reference](http://rdoc.info/github/mguinada/vlc-client)
 
-## Support
+## Notice
 
 vlc-client has been tested on linux only.
-If you need support for other OS a pull request is welcome.
+
+VLC media player 2.0.3 seems to [ship with a bug](http://www.linuxquestions.org/questions/slackware-14/problem-vlc-2-0-3-playing-youtube-videos-4175429135) on it's lua script that supports streaming from youtube.com.
+[Please use VLC 2.0.4 or later](http://www.videolan.org/)
 
 ## Contributing
 
