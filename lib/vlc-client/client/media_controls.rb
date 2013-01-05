@@ -108,7 +108,7 @@ module VLC
         when String, URI
           media
         else
-          raise ArgumentError, "Can play: #{media}"
+          raise ArgumentError, "Can not play: #{media}"
         end
       end
     end
