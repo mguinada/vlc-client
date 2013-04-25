@@ -110,3 +110,4 @@ Copyright (c) 2012 Miguel Guinada
 [LICENSE][] for details.
 
 [license]: https://github.com/mguinada/vlc-client/blob/master/LICENSE
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/8b1a3dc0229bef37fd7746bb62d29997 "githalytics.com")](http://githalytics.com/mguinada/vlc-client)
