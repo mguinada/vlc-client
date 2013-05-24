@@ -1,6 +1,6 @@
 # vlc-client [![Build Status](https://secure.travis-ci.org/mguinada/vlc-client.png?branch=master)](http://travis-ci.org/mguinada/vlc-client)
 
-vlc-client manages a [VLC media player](http://www.videolan.org/vlc/) through it's RC interface.
+vlc-client manages a [VLC media player](http://www.videolan.org/vlc/) instance through it's RC interface.
 
 ## Installation
 
@@ -30,10 +30,13 @@ vlc = VLC::Client.new('192.168.1.10', 9999)
 
 vlc.connect
 # => true
+
 vlc.play('http://example.org/media.mp3') #play media
 # => true
+
 vlc.playing?
 # => true
+
 vlc.fullscreen
 # => true
 #...
@@ -41,13 +44,12 @@ vlc.fullscreen
 ```
 
 ### Create a self managed client/server system.
-_Most of the time we want a local client/server VLC media player system_
+Most of the time we want a local client/server VLC media player system
 
-_(NOTE: requires a local installation of VLC media player)_
 
 ```ruby
 
-vlc = VLC::System.new #A local VLC client/server system where a local VLC server is automaticaly managed
+vlc = VLC::System.new #A local VLC client/server system where a local VLC installation is automaticaly managed
 # => "#<VLC::System:0x00000001bbb1a0 @client=#<VLC::Client:0x00000001bbade0 @server=#<VLC::Server:0x00000001bbb178 @headless=false, @port=9595, @host=\"localhost\", @pid=11225>, @connection=#<VLC::Connection:0x00000001bbacc8 @port=9595, @host=\"localhost\", @socket=#<TCPSocket:fd 5>>>>"
 
 vlc.connected? #auto_connect
@@ -66,7 +68,6 @@ vlc = VLC::Client.new(VLC::Server.new('localhost', 9595, false))
 ```
 
 ###Get local VLC server lifecycle management control
-_(NOTE: requires a local installation of VLC media player)_
 
 ```ruby
 
@@ -75,8 +76,10 @@ vlc = VLC::System.new('127.0.0.1', 9999, auto_start: false)
 
 vlc.server.running?
 # => false
+
 vlc.server.start
 # => 12672
+
 vlc.connect
 # => true
 ```
@@ -89,7 +92,7 @@ vlc.connect
 
 vlc-client has been tested on linux only.
 
-VLC media player 2.0.3 seems to [ship with a bug](http://www.linuxquestions.org/questions/slackware-14/problem-vlc-2-0-3-playing-youtube-videos-4175429135) on it's lua script that supports streaming from youtube.com.
+VLC media player 2.0.3 seems to [ship with a bug](http://www.linuxquestions.org/questions/slackware-14/problem-vlc-2-0-3-playing-youtube-videos-4175429135) that invalidates YouTube streaming.
 [Please use VLC 2.0.4 or later](http://www.videolan.org/)
 
 ## Contributing
