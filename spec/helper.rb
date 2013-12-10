@@ -1,10 +1,13 @@
 require 'simplecov'
+require 'coveralls'
 require 'pry'
 
-#setup simplecov
-SimpleCov.start do
-  add_filter "/spec"
-end
+# SimpleCov & Coveralls setup
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start
 
 require File.expand_path('../../lib/vlc-client', __FILE__)
 
