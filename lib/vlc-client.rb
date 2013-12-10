@@ -68,8 +68,8 @@ module VLC
     end
 
     attr_reader :connection
-    
-    private
+
+   private
     def bind_server(server, options = {})
       @connection.host = server.host
       @connection.port = server.port
