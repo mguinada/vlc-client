@@ -19,3 +19,4 @@ tmp
 .sublime/
 Guardfile
 trials
+.ruby-*

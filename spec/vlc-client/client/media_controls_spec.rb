@@ -42,7 +42,7 @@ describe VLC::Client::MediaControls do
     def tcp_mock
       tcp = mock_tcp_server(:defaults => false)
 
-      tcp.should_receive(:flush).with(no_args).any_number_of_times
+      tcp.should_receive(:flush).with(no_args).at_least(1).times
       tcp.should_receive(:gets).with(no_args).twice.and_return("")
 
       tcp.should_receive(:puts).once.with('add http://example.org/media.mp3')
@@ -190,7 +190,7 @@ describe VLC::Client::MediaControls do
 
   it 'is aware of current status' do
     tcp = mock_tcp_server(:defaults => false)
-    tcp.should_receive(:flush).with(no_args).any_number_of_times
+    tcp.should_receive(:flush).with(no_args).at_least(1).times
 
     tcp.should_receive(:gets).with(no_args).twice.and_return("")
 
