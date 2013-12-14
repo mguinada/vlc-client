@@ -11,11 +11,7 @@ describe VLC::Client::MediaControls do
     end
 
     it 'from a file descriptor' do
-      File.stub(:open).and_return {
-        f = File.new('./LICENSE', 'r')
-        f.should_receive(:path).once.and_return('./media.mp3')
-        f
-      }
+      mock_file('./media.mp3')
 
       mock_tcp_server.should_receive(:puts).once.with('add ./media.mp3')
       vlc.connect

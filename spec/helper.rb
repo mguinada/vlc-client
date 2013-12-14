@@ -65,6 +65,14 @@ module Mocks
     mock_system_calls
     mock_tcp_server
   end
+
+  def mock_file(filename)
+    File.stub(:open).and_return {
+      f = File.new('./LICENSE', 'r')
+      f.should_receive(:path).once.and_return(filename)
+      f
+    }
+  end
 end
 
 RSpec.configure do |cfg|

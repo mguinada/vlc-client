@@ -10,6 +10,7 @@ require 'vlc-client/connection'
 require 'vlc-client/errors'
 
 require 'vlc-client/client/media_controls'
+require 'vlc-client/client/playlist_controls'
 require 'vlc-client/client/video_controls'
 require 'vlc-client/client/connection_management'
 
@@ -19,6 +20,7 @@ module VLC
   # The VLC client
   class Client
     include VLC::Client::MediaControls
+    include VLC::Client::PlaylistControls
     include VLC::Client::VideoControls
     include VLC::Client::ConnectionManagement
 
