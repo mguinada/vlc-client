@@ -25,7 +25,7 @@ namespace :doc do
 
     desc "Generate documentation"
     YARD::Rake::YardocTask.new do |t|
-      t.files   = ['README.md', 'LICENSE.md', 'lib/**/*.rb']
+      t.files   = ['lib/**/*.rb']
       t.options = ['--no-private', '--protected', '--markup', 'markdown']
     end
   rescue LoadError
