@@ -90,7 +90,7 @@ vlc.connect
 
 ## Notice
 
-vlc-client has been tested on linux but it should work on any VLC installation as long and the command line is responsive for `vlc` and `cvlc` calls. On Mac OSX these are not available by default. They can be created with:
+vlc-client has been tested on linux but it should work on any VLC installation as long as the command line is responsive for `vlc` and `cvlc` calls. On Mac OSX these are not available by default. They can be created with:
 
 ```
 ln -s /Applications/VLC.app/Contents/MacOS/VLC /usr/local/bin/vlc
