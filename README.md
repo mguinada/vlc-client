@@ -90,10 +90,10 @@ vlc.connect
 
 ## Notice
 
-vlc-client has been tested on linux only.
+vlc-client has been tested on linux but it should work on any VLC installation as long and the command line is responsive for `vlc` and `cvlc` calls.
 
 VLC media player 2.0.3 seems to [ship with a bug](http://www.linuxquestions.org/questions/slackware-14/problem-vlc-2-0-3-playing-youtube-videos-4175429135) that invalidates YouTube streaming.
-[Please use VLC 2.0.4 or later](http://www.videolan.org/)
+[Please use VLC 2.0.4 or later](http://www.videolan.org/). The last tested version is VLC media player 2.1.2 Rincewind
 
 ## Contributing
 
