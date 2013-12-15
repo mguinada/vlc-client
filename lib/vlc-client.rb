@@ -99,5 +99,16 @@ module VLC
       end
       args
     end
+
+    def media_arg(media)
+      case media
+      when File
+        media.path
+      when String, URI
+        media
+      else
+        raise ArgumentError, "Can not play: #{media}"
+      end
+    end
   end
 end
