@@ -1,6 +1,5 @@
 require 'simplecov'
 require 'coveralls'
-require 'pry'
 
 # SimpleCov & Coveralls setup
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
