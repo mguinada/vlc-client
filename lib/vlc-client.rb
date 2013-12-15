@@ -10,6 +10,7 @@ require 'vlc-client/connection'
 require 'vlc-client/errors'
 
 require 'vlc-client/client/media_controls'
+require 'vlc-client/client/playlist_controls'
 require 'vlc-client/client/video_controls'
 require 'vlc-client/client/connection_management'
 
@@ -19,6 +20,7 @@ module VLC
   # The VLC client
   class Client
     include VLC::Client::MediaControls
+    include VLC::Client::PlaylistControls
     include VLC::Client::VideoControls
     include VLC::Client::ConnectionManagement
 
@@ -68,8 +70,8 @@ module VLC
     end
 
     attr_reader :connection
-    
-    private
+
+   private
     def bind_server(server, options = {})
       @connection.host = server.host
       @connection.port = server.port
@@ -96,6 +98,17 @@ module VLC
         @host, @port = 'localhost', 9595
       end
       args
+    end
+
+    def media_arg(media)
+      case media
+      when File
+        media.path
+      when String, URI
+        media
+      else
+        raise ArgumentError, "Can not play: #{media}"
+      end
     end
   end
 end

@@ -1,7 +1,12 @@
 require 'simplecov'
-require 'pry'
+require 'coveralls'
 
-#setup simplecov
+# SimpleCov & Coveralls setup
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+
 SimpleCov.start do
   add_filter "/spec"
 end
@@ -13,8 +18,8 @@ module Mocks
     tcp = double()
     TCPSocket.stub(:new).and_return do
       if opts.fetch(:defaults, true)
+        tcp.stub(:flush)
         tcp.should_receive(:gets).with(no_args).at_least(:twice).and_return("")
-        tcp.should_receive(:flush).with(no_args).any_number_of_times
         tcp.should_receive(:close).with(no_args) if opts.fetch(:close, true)
       end
 
@@ -37,8 +42,8 @@ module Mocks
       end
       Process.should_receive(:pid).once.and_return(99)
 
-      rd = stub('rd', :close => true)
-      wd = stub('wd', :write => true, :close => true)
+      rd = double('rd', :close => true)
+      wd = double('wd', :write => true, :close => true)
       IO.stub(:pipe).and_return([rd, wd])
 
       [STDIN, STDOUT, STDERR].each { |std| std.stub(:reopen) }
@@ -47,8 +52,8 @@ module Mocks
     else
       Process.stub(:fork).and_return(true)
 
-      rd = stub('rd', :read => 99, :close => true)
-      wd = stub('wd', :close => true)
+      rd = double('rd', :read => 99, :close => true)
+      wd = double('wd', :close => true)
       IO.stub(:pipe).and_return([rd, wd])
 
       Process.should_receive(:kill).once.with('INT', 99) if opts.fetch(:kill, true)
@@ -58,6 +63,14 @@ module Mocks
   def mock_sub_systems
     mock_system_calls
     mock_tcp_server
+  end
+
+  def mock_file(filename)
+    File.stub(:open).and_return {
+      f = File.new('./LICENSE', 'r')
+      f.should_receive(:path).once.and_return(filename)
+      f
+    }
   end
 end
 

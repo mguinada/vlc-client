@@ -1,7 +1,6 @@
 #!/usr/bin/env rake
 require 'bundler/gem_tasks'
 require 'rspec/core/rake_task'
-require 'yard'
 
 task :test    => :spec
 task :default => :spec
@@ -21,10 +20,16 @@ task :console do
 end
 
 namespace :doc do
-  desc "Generate documentation"
-  YARD::Rake::YardocTask.new do |t|
-    t.files   = ['lib/**/*.rb']
-    t.options = ['--no-private', '--protected', '--markup', 'markdown']
+  begin
+    require 'yard'
+
+    desc "Generate documentation"
+    YARD::Rake::YardocTask.new do |t|
+      t.files   = ['lib/**/*.rb']
+      t.options = ['--no-private', '--protected', '--markup', 'markdown']
+    end
+  rescue LoadError
+    puts "yard not available"
   end
 end
 
