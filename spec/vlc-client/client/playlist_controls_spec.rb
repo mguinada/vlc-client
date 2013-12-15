@@ -27,5 +27,19 @@ describe VLC::Client::PlaylistControls do
       vlc.playlist.should eq([{:number => 1, :title => "Track 1", :length => "00:01:30", :times_played => 2},
                               {:number => 2, :title => "Track 2", :length => "00:00:23", :times_played => 0}])
     end
+
+    it 'plays the next element on the playlist' do
+      vlc.connect
+
+      vlc.connection.should_receive(:write).once.with("next")
+      vlc.next
+    end
+
+    it 'plays the previous element on the playlist' do
+      vlc.connect
+
+      vlc.connection.should_receive(:write).once.with("prev")
+      vlc.previous
+    end
   end
 end

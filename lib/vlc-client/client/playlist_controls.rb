@@ -23,6 +23,16 @@ module VLC
         process_raw_playlist(list)
       end
 
+      # Plays the next element on the playlist
+      def next
+        connection.write("next")
+      end
+
+      # Plays the previous element on the playlist
+      def previous
+        connection.write("prev")
+      end
+
     private
       def process_raw_playlist(list)
         list.map do |i|
