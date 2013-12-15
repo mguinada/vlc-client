@@ -17,7 +17,7 @@ describe VLC::Client::PlaylistControls do
       vlc.connect
 
       vlc.connection.should_receive(:write).once.with("playlist")
-      vlc.connection.should_receive(:read).once.with(no_args).and_return("+----[ Playlist - Undefined ]")
+      vlc.connection.should_receive(:read).once.with(no_args).and_return("+----[ Playlist - Test ]")
       vlc.connection.should_receive(:read).once.with(no_args).and_return("| 2 - Playlist")
       vlc.connection.should_receive(:read).once.with(no_args).and_return("|   1 - Track 1 (00:01:30) [played 2 times]")
       vlc.connection.should_receive(:read).once.with(no_args).and_return("|   2 - Track 2 (00:00:23)")
@@ -40,6 +40,13 @@ describe VLC::Client::PlaylistControls do
 
       vlc.connection.should_receive(:write).once.with("prev")
       vlc.previous
+    end
+
+    it 'clear the playlist' do
+      vlc.connect
+
+      vlc.connection.should_receive(:write).once.with("clear")
+      vlc.clear
     end
   end
 end

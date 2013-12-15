@@ -33,6 +33,10 @@ module VLC
         connection.write("prev")
       end
 
+      # Clears the playlist
+      def clear
+        connection.write("clear")
+      end
     private
       def process_raw_playlist(list)
         list.map do |i|
