@@ -4,7 +4,7 @@ gem 'rake'
 
 group :development do
   gem 'guard-rspec', '~> 2.5.1'
-  gem 'maruku'
+  gem 'redcarpet'
   gem 'yard'
   gem 'pry'
 end
