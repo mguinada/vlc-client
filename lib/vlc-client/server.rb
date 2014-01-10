@@ -61,7 +61,7 @@ module VLC
       end
 
       # for Ruby 1.8 and below
-      rd, rw = IO.pipe
+      rd, wr = IO.pipe
       if Process.fork      #parent
         wr.close
         @pid = rd.read.to_i

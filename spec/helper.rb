@@ -31,17 +31,15 @@ module Mocks
 
   def mock_system_calls(opts = {})
     if RUBY_VERSION < "1.9"
-      Process.should_receive(:setsid).once.ordered
-      Process.should_receive(:fork).once.ordered.and_return(false)
-      Dir.should_receive(:chdir).once.with("/")
-      Process.should_receive(:pid).once.and_return(99)
       rd = double('rd', :read => 99, :close => true)
-      wd = double('wd', :close => true)
-      IO.stub(:pipe).and_return([rd, wd])
+      wr = double('wr', :close => true)
+      IO.stub(:pipe).and_return([rd, wr])
+      Process.stub(:fork).twice.and_return(true)
+      Process.stub(:pid).once.and_return(99)
       Kernel.stub(:exec)
       [STDIN, STDOUT, STDERR].each { |std| std.stub(:reopen) }
     else
-      Process.should_receive(:spawn).once.and_return(99)# if opts.fetch(:daemonized, true)
+      Process.should_receive(:spawn).once.and_return(99)
     end
 
     Process.should_receive(:kill).once.with('INT', 99) if opts.fetch(:kill, true)
