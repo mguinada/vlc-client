@@ -24,6 +24,7 @@ module VLC
     include VLC::Client::VideoControls
     include VLC::Client::ConnectionManagement
 
+    attr_reader   :connection
     attr_accessor :host,
                   :port,
                   :server
@@ -68,8 +69,6 @@ module VLC
       @connection = Connection.new(host, port)
       bind_server(server, options) unless server.nil?
     end
-
-    attr_reader :connection
 
    private
     def bind_server(server, options = {})

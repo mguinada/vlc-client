@@ -31,6 +31,7 @@ module Mocks
 
   def mock_system_calls(opts = {})
     if RUBY_VERSION < "1.9"
+      # ruby 1.8.x system call stubs
       rd = double('rd', :read => 99, :close => true)
       wr = double('wr', :close => true)
       IO.stub(:pipe).and_return([rd, wr])
@@ -39,15 +40,11 @@ module Mocks
       Kernel.stub(:exec)
       [STDIN, STDOUT, STDERR].each { |std| std.stub(:reopen) }
     else
+      # ruby 1.9+ process spwan mock
       Process.should_receive(:spawn).once.and_return(99)
     end
 
     Process.should_receive(:kill).once.with('INT', 99) if opts.fetch(:kill, true)
-  end
-
-  def mock_sub_systems
-    mock_system_calls
-    mock_tcp_server
   end
 
   def mock_file(filename)

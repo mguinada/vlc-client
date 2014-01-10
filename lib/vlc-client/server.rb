@@ -47,16 +47,14 @@ module VLC
       return @pid if running?
       detached ? @deamon = true : setup_traps
 
-      # use Process::spawn if we can
-      # allows usage in JRuby
       if RUBY_VERSION >= '1.9'
-        @pid = Process::spawn(
-           (headless? ? 'cvlc' : 'vlc'),
-           '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
-           :pgroup => detached,
-           :in => '/dev/null',
-             :out => '/dev/null',
-             :err => '/dev/null')
+        @pid = Process.spawn(headless? ? 'cvlc' : 'vlc',
+                             '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                             :pgroup => detached,
+                             :in => '/dev/null',
+                             :out => '/dev/null',
+                             :err => '/dev/null')
+
         return @pid
       end
 
@@ -118,9 +116,20 @@ module VLC
 
   private
     def setup_traps
-      trap("EXIT") { stop }
-      trap("INT")  { stop }
-      trap("CLD")  { @pid = NullObject.new; @deamon = false }
+      trap("EXIT") do
+        stop
+        exit
+      end
+
+      trap("INT") do
+        stop
+        exit
+      end
+
+      trap("CLD") do
+        @pid = NullObject.new
+        @deamon = false
+      end
     end
 
     def detach
