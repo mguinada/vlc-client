@@ -18,7 +18,6 @@ describe VLC::System do
   end
 
   it 'handles server lifecycle management to client code' do
-    mock_system_calls(:kill => false)
     mock_tcp_server(:close => false)
 
     vlc = VLC::System.new('127.0.0.1', 9999, :auto_start => false)
