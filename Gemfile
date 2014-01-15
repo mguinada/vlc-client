@@ -16,5 +16,4 @@ group :test do
   gem 'coveralls', :require => false
 end
 
-# Specify your gem's dependencies in vlc.gemspec
 gemspec

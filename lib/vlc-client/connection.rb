@@ -26,7 +26,7 @@ module VLC
     # @return [Boolean] true is connected, false otherwise
     #
     def connected?
-      not @socket.nil?
+      not(@socket.nil?)
     end
 
     # Disconnects from VLC RC interface

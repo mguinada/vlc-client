@@ -1,7 +1,7 @@
 describe VLC::Client::ConnectionManagement do
-  let(:vlc) { VLC::Client.new(:self_managed => false) }
   before(:each) { mock_tcp_server }
-  after(:each) { vlc.disconnect }
+  after(:each)  { vlc.disconnect }
+  let(:vlc)     { VLC::Client.new(:self_managed => false) }
 
   context 'when disconnected' do
     specify { vlc.should be_disconnected }

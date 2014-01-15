@@ -1,6 +1,6 @@
 describe VLC::Client::VideoControls do
-  let(:vlc) { VLC::Client.new(:self_managed => false) }
   after(:each) { vlc.disconnect }
+  let(:vlc)    { VLC::Client.new(:self_managed => false) }
 
   context 'manipulate the screen size' do
     it 'toggles fullscreen' do

@@ -23,7 +23,7 @@ module VLC
     # @return [Boolean] true is VLC is running, false otherwise
     #
     def running?
-      not @pid.nil?
+      not(@pid.nil?)
     end
 
     alias :started? :running?
@@ -32,7 +32,9 @@ module VLC
     #
     # @return [Boolean] true is VLC is stopped, false otherwise
     #
-    def stopped?; not running?; end
+    def stopped?
+      not(running?)
+    end
 
     # Starts a VLC instance in a subprocess
     #
@@ -47,38 +49,11 @@ module VLC
       return @pid if running?
       detached ? @deamon = true : setup_traps
 
-      if RUBY_VERSION >= '1.9'
-        @pid = Process.spawn(headless? ? 'cvlc' : 'vlc',
-                             '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
-                             :pgroup => detached,
-                             :in => '/dev/null',
-                             :out => '/dev/null',
-                             :err => '/dev/null')
-
-        return @pid
-      end
-
-      # for Ruby 1.8 and below
-      rd, wr = IO.pipe
-      if Process.fork      #parent
-        wr.close
-        @pid = rd.read.to_i
-        rd.close
-        return @pid
-      else                 #child
-        rd.close
-
-        detach if detached #daemonization
-
-        wr.write(Process.pid)
-        wr.close
-
-        STDIN.reopen "/dev/null"
-        STDOUT.reopen "/dev/null", "a"
-        STDERR.reopen "/dev/null", "a"
-
-        Kernel.exec "#{headless? ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
-      end
+      @pid = if RUBY_VERSION >= '1.9'
+               process_spawn(detached)
+             else
+               process_spawn_ruby_1_8(detached)
+             end
     end
 
     # Start a VLC instance as a system deamon
@@ -106,7 +81,7 @@ module VLC
     #                     as no effect (e.g. VLC not running)
     #
     def stop
-      return nil if not running?
+      return nil if stopped?
 
       Process.kill('INT', pid = @pid)
       @pid = NullObject.new
@@ -115,6 +90,38 @@ module VLC
     end
 
   private
+    def process_spawn(detached)
+      Process.spawn(headless? ? 'cvlc' : 'vlc',
+                    '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                    :pgroup => detached,
+                    :in => '/dev/null',
+                    :out => '/dev/null',
+                    :err => '/dev/null')
+    end
+
+    # For ruby 1.8
+    def process_spawn_ruby_1_8(detached)
+      rd, wr = IO.pipe
+      if Process.fork      #parent
+        wr.close
+        pid = rd.read.to_i
+        rd.close
+        return pid
+      else                 #child
+        rd.close
+
+        detach if detached #daemonization
+
+        wr.write(Process.pid)
+        wr.close
+
+        STDIN.reopen "/dev/null"
+        STDOUT.reopen "/dev/null", "a"
+        STDERR.reopen "/dev/null", "a"
+
+        Kernel.exec "#{headless? ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
+      end
+    end
     def setup_traps
       trap("EXIT") do
         stop

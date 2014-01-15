@@ -1,7 +1,7 @@
 describe VLC::Client::PlaylistControls do
-  let(:vlc) { VLC::Client.new(:self_managed => false) }
+  after(:each)  { vlc.disconnect }
   let!(:server) { mock_tcp_server }
-  after(:each) { vlc.disconnect }
+  let(:vlc)     { VLC::Client.new(:self_managed => false) }
 
   it 'enqueues media' do
     server.should_receive(:puts).once.with('enqueue media.mp3')

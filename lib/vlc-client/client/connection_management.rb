@@ -16,7 +16,9 @@ module VLC
         connection.connected?
       end
 
-      def disconnected?; not connected?; end
+      def disconnected?
+        not(connected?)
+      end
     end
   end
 end

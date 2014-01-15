@@ -70,7 +70,7 @@ module VLC
       bind_server(server, options) unless server.nil?
     end
 
-   private
+  private
     def bind_server(server, options = {})
       @connection.host = server.host
       @connection.port = server.port

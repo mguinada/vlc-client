@@ -1,6 +1,6 @@
 describe VLC::Client::MediaControls do
-  let(:vlc) { VLC::Client.new(:self_managed => false) }
   after(:each) { vlc.disconnect }
+  let(:vlc)    { VLC::Client.new(:self_managed => false) }
 
   context 'plays media' do
     it 'from filesystem' do

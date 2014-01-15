@@ -11,6 +11,6 @@ module VLC
   # Raised on a write to a broken connection
   class BrokenConnectionError < Error; end
 
-  # Raised on a write ti a disconnected connection
+  # Raised on a write to a disconnected connection
   class NotConnectedError < Error; end
 end

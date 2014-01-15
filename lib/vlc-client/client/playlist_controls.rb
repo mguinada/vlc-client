@@ -2,6 +2,9 @@ module VLC
   class Client
     module PlaylistControls
       # @private
+      LIST_ITEM_REGEXP = /^\|[\s]*(\d{1,2})\s-\s(.+)\((\d\d:\d\d:\d\d)\)(\s\[played\s(\d+)\stime[s]?\])?/
+
+      # @private
       PLAYLIST_TERMINATOR = "+----[ End of playlist ]"
 
       # Adds media to the playlist
@@ -20,7 +23,8 @@ module VLC
         begin
           list << connection.read
         end while list.last != PLAYLIST_TERMINATOR
-        process_raw_playlist(list)
+
+        parse_playlist(list)
       end
 
       # Plays the next element on the playlist
@@ -38,15 +42,15 @@ module VLC
         connection.write("clear")
       end
     private
-      def process_raw_playlist(list)
-        list.map do |i|
-          match = i.match(/^\|[\s]*(\d{1,2})\s-\s(.+)\((\d\d:\d\d:\d\d)\)(\s\[played\s(\d+)\stime[s]?\])?/)
+      def parse_playlist(list)
+        list.map do |item|
+          match = item.match(LIST_ITEM_REGEXP)
 
           next if match.nil?
 
-          {:number => match[1].to_i,
-           :title => match[2].strip,
-           :length => match[3],
+          {:number       => match[1].to_i,
+           :title        => match[2].strip,
+           :length       => match[3],
            :times_played => match[5].to_i}
         end.compact
       end

@@ -48,11 +48,11 @@ module Mocks
   end
 
   def mock_file(filename)
-    File.stub(:open).and_return {
-      f = File.new('./LICENSE', 'r')
+    File.stub(:open).and_return do
+      f = File.new('./README.md', 'r')
       f.should_receive(:path).once.and_return(filename)
       f
-    }
+    end
   end
 end
 
