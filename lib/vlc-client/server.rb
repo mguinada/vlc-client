@@ -122,6 +122,7 @@ module VLC
         Kernel.exec "#{headless? ? 'cvlc' : 'vlc'} --extraintf rc --rc-host #{@host}:#{@port}"
       end
     end
+
     def setup_traps
       trap("EXIT") do
         stop
