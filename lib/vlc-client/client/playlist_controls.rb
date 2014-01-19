@@ -41,6 +41,7 @@ module VLC
       def clear
         connection.write("clear")
       end
+
     private
       def parse_playlist(list)
         list.map do |item|
