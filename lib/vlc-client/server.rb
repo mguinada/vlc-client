@@ -91,12 +91,20 @@ module VLC
 
   private
     def process_spawn(detached)
-      Process.spawn(headless? ? 'cvlc' : 'vlc',
-                    '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
-                    :pgroup => detached,
-                    :in => '/dev/null',
-                    :out => '/dev/null',
-                    :err => '/dev/null')
+      if (ENV['OS'] == 'Windows_NT') # We don't have pgroup, and should write to NUL in case the env doesn't simulate /dev/null
+        Process.spawn(headless? ? 'cvlc' : 'vlc',
+                             '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                             :in => 'NUL',
+                             :out => 'NUL',
+                             :err => 'NUL')        
+      else
+        Process.spawn(headless? ? 'cvlc' : 'vlc',
+                      '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                      :pgroup => detached,
+                      :in => '/dev/null',
+                      :out => '/dev/null',
+                      :err => '/dev/null')
+      end
     end
 
     # For ruby 1.8
@@ -134,9 +142,11 @@ module VLC
         exit
       end
 
-      trap("CLD") do
-        @pid = NullObject.new
-        @deamon = false
+      if Signal.list["CLD"] # Windows does not support this signal. Or daemons.
+        trap("CLD") do
+          @pid = NullObject.new
+          @deamon = false
+        end
       end
     end
 

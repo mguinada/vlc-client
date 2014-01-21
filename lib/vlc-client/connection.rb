@@ -1,4 +1,5 @@
 require 'socket'
+require 'timeout'
 
 module VLC
   #
@@ -15,7 +16,7 @@ module VLC
     # Connects to VLC RC interface on Client#host and Client#port
     def connect
       @socket = TCPSocket.new(@host, @port)
-      2.times { read } #Clean the reading channel
+      2.times { read(0.4) } #Clean the reading channel
       true
     rescue Errno::ECONNREFUSED => e
       raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
@@ -61,9 +62,20 @@ module VLC
     #
     # @return [String] the data
     #
-    def read
-      #TODO: Timeouts
-      raw_data = @socket.gets.chomp
+    def read(timeout = nil)
+      raw_data = nil
+      if (timeout)
+        begin
+          Timeout.timeout(timeout) do
+            raw_data = @socket.gets.chomp
+          end
+        rescue Timeout::Error
+          return nil #Timed out
+        end
+      else
+        raw_data = @socket.gets.chomp
+      end
+
       if (data = process_data(raw_data))
         data[1]
       else
