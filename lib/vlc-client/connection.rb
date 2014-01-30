@@ -64,7 +64,7 @@ module VLC
     #
     def read(timeout = nil)
       raw_data = nil
-      if (timeout)
+      if timeout
         begin
           Timeout.timeout(timeout) do
             raw_data = @socket.gets.chomp
