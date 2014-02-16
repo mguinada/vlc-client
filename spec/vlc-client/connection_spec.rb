@@ -42,7 +42,37 @@ describe VLC::Connection do
     end
   end
 
+  context 'supports read timeouts' do
+    it 'per call' do
+      tcp = mock_tcp_server
+      connection.connect
+
+      Timeout.should_receive(:timeout).with(5)
+      connection.should_receive(:process_data).and_return("")
+      connection.read(5)
+    end
+
+    it 'configured' do
+      tcp = mock_tcp_server
+      conn = VLC::Connection.new('localhost', 9595, 3)
+      conn.connect
+
+      Timeout.should_receive(:timeout).with(3)
+      conn.should_receive(:process_data).and_return("")
+      conn.read
+      conn.close
+    end
+  end
+
   context 'raises error on' do
+    it 'read timeout' do
+       tcp = mock_tcp_server
+       connection.connect
+
+       Timeout.should_receive(:timeout).and_raise(Timeout::Error)
+       expect { connection.read(0) }.to raise_error(VLC::ReadTimeoutError)
+    end
+
     it 'unreadable content' do
       tcp = mock_tcp_server
       tcp.should_receive(:puts).once.with('some data')

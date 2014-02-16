@@ -27,6 +27,13 @@ describe VLC::Client do
       vlc.server.should_not be_started
       vlc.should_not be_connected
     end
+
+    it 'accepts timeout configuration' do
+      mock_system_calls(:kill => false)
+
+      vlc = VLC::Client.new(VLC::Server.new('10.0.0.1', 9999), :read_timeout => 3)
+      vlc.connection.read_timeout.should eq(3)
+    end
   end
 
   it 'may manage an embedded VLC server' do

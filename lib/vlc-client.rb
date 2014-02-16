@@ -46,6 +46,7 @@ module VLC
     #   @option options [Boolean] :auto_start When false, the server lifecycle is not managed automatically and controll is passed to the developer
     #   @option options [Integer] :conn_retries Number of connection retries (each separated by a second) to make on auto-connect. Defaults to 5.
     #   @option options [Boolean] :daemonize When true and only when on server auto-start mode, the server will be detached and run as a daemon process. Defaults to false.
+    #   @option options [Integer] :read_timeout Read timout value
     #
     #   @example
     #     vlc = VLC::Client.new(VLC::Server.new)
@@ -63,10 +64,12 @@ module VLC
     #
     def initialize(*args)
       args = NullObject.Null?(args)
-      options = args.extract_options!
 
+      options = args.extract_options!
       process_args(args)
-      @connection = Connection.new(host, port)
+      read_timeout = options.fetch(:read_timeout, VLC::Connection::DEFAULT_READ_TIMEOUT)
+
+      @connection = Connection.new(host, port, read_timeout)
       bind_server(server, options) unless server.nil?
     end
 

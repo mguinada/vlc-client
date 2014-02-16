@@ -13,4 +13,7 @@ module VLC
 
   # Raised on a write to a disconnected connection
   class NotConnectedError < Error; end
+
+  # Raised on a read timeout
+  class ReadTimeoutError < Error; end
 end
