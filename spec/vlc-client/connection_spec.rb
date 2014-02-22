@@ -48,7 +48,7 @@ describe VLC::Connection do
       connection.connect
 
       Timeout.should_receive(:timeout).with(5)
-      connection.should_receive(:parse_raw_data).and_return({:payload => ""})
+      connection.should_receive(:parse_raw_data).and_return([])
       connection.read(5)
     end
 
@@ -58,7 +58,7 @@ describe VLC::Connection do
       connection.connect
 
       Timeout.should_receive(:timeout).with(3)
-      connection.should_receive(:parse_raw_data).and_return({:payload => ""})
+      connection.should_receive(:parse_raw_data).and_return([])
       connection.read
       connection.close
     end

@@ -78,7 +78,7 @@ module VLC
       end
 
       if (data = parse_raw_data(raw_data))
-        data[:payload]
+        data[1]
       else
         raise VLC::ProtocolError, "could not interpret the playload: #{raw_data}"
       end
@@ -88,7 +88,7 @@ module VLC
 
     def parse_raw_data(data)
       return nil if data.nil?
-      data.match(%r{^[>*\s*]*(?<payload>.*)$})
+      data.match(%r{^[>*\s*]*(.*)$})
     end
   end
 end
