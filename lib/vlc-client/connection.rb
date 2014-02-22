@@ -16,10 +16,6 @@ module VLC
       @read_timeout = read_timeout || DEFAULT_READ_TIMEOUT
     end
 
-    def read_timeout
-      @read_timeout ||= DEFAULT_READ_TIMEOUT
-    end
-
     # Connects to VLC RC interface on Client#host and Client#port
     def connect
       @socket = TCPSocket.new(@host, @port)
@@ -73,7 +69,7 @@ module VLC
     #
     # @return [String] the data
     #
-    def read(timeout = nil)
+    def read(timeout=nil)
       timeout = read_timeout if timeout.nil?
       raw_data = nil
 
@@ -81,7 +77,7 @@ module VLC
         raw_data = @socket.gets.chomp
       end
 
-      if (data = process_data(raw_data))
+      if (data = parse_raw_data(raw_data))
         data[1]
       else
         raise VLC::ProtocolError, "could not interpret the playload: #{raw_data}"
@@ -90,7 +86,7 @@ module VLC
       raise VLC::ReadTimeoutError, "read timeout"
     end
 
-    def process_data(data)
+    def parse_raw_data(data)
       data.match(/^[>*\s*]*(.*)$/)
     end
   end

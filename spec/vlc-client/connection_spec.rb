@@ -48,7 +48,7 @@ describe VLC::Connection do
       connection.connect
 
       Timeout.should_receive(:timeout).with(5)
-      connection.should_receive(:process_data).and_return("")
+      connection.should_receive(:parse_raw_data).and_return("")
       connection.read(5)
     end
 
@@ -58,7 +58,7 @@ describe VLC::Connection do
       connection.connect
 
       Timeout.should_receive(:timeout).with(3)
-      connection.should_receive(:process_data).and_return("")
+      connection.should_receive(:parse_raw_data).and_return("")
       connection.read
       connection.close
     end
@@ -84,7 +84,7 @@ describe VLC::Connection do
       tcp.should_receive(:gets).once.and_return('some response data')
 
       connection.connect
-      connection.should_receive(:process_data).once.and_return(nil)
+      connection.should_receive(:parse_raw_data).once.and_return(nil)
 
       expect { connection.write('some data', false) }.to raise_error(VLC::ProtocolError)
     end
