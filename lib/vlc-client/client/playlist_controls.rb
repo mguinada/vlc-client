@@ -2,10 +2,15 @@ module VLC
   class Client
     module PlaylistControls
       # @private
-      LIST_ITEM_REGEXP = /^\|[\s]*(\d{1,2})\s-\s(.+)\((\d\d:\d\d:\d\d)\)(\s\[played\s(\d+)\stime[s]?\])?/
+      PLAYLIST_TERMINATOR = "+----[ End of playlist ]"
 
       # @private
-      PLAYLIST_TERMINATOR = "+----[ End of playlist ]"
+      LIST_ITEM_REGEXP = %r{
+        ^\|[\s]*
+        (?<number>\d{1,2})\s-\s(?<title>.+)
+        \((?<length>\d\d:\d\d:\d\d)\)(\s\[played\s
+        (?<times_played>\d+)\stime[s]?\])?
+      }x
 
       # Adds media to the playlist
       #
@@ -49,10 +54,10 @@ module VLC
 
           next if match.nil?
 
-          {:number       => match[1].to_i,
-           :title        => match[2].strip,
-           :length       => match[3],
-           :times_played => match[5].to_i}
+          {:number       => match[:number].to_i,
+           :title        => match[:title].strip,
+           :length       => match[:length],
+           :times_played => match[:times_played].to_i}
         end.compact
       end
     end
