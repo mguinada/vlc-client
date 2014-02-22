@@ -10,10 +10,14 @@ module VLC
 
     attr_accessor :host, :port, :read_timeout
 
-    def initialize(host, port, read_timeout = DEFAULT_READ_TIMEOUT)
+    def initialize(host, port, read_timeout=nil)
       @host, @port = host, port
       @socket = NullObject.new
-      @read_timeout = read_timeout
+      @read_timeout = read_timeout || DEFAULT_READ_TIMEOUT
+    end
+
+    def read_timeout
+      @read_timeout ||= DEFAULT_READ_TIMEOUT
     end
 
     # Connects to VLC RC interface on Client#host and Client#port
@@ -80,7 +84,7 @@ module VLC
       if (data = process_data(raw_data))
         data[1]
       else
-        raise ProtocolError, "could not interpret the playload: #{raw_data}"
+        raise VLC::ProtocolError, "could not interpret the playload: #{raw_data}"
       end
     rescue Timeout::Error
       raise VLC::ReadTimeoutError, "read timeout"

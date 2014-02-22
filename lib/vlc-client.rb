@@ -67,9 +67,8 @@ module VLC
 
       options = args.extract_options!
       process_args(args)
-      read_timeout = options.fetch(:read_timeout, VLC::Connection::DEFAULT_READ_TIMEOUT)
 
-      @connection = Connection.new(host, port, read_timeout)
+      @connection = Connection.new(host, port, options[:read_timeout])
       bind_server(server, options) unless server.nil?
     end
 

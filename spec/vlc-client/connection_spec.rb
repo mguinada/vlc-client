@@ -54,13 +54,18 @@ describe VLC::Connection do
 
     it 'configured' do
       tcp = mock_tcp_server
-      conn = VLC::Connection.new('localhost', 9595, 3)
-      conn.connect
+      connection = VLC::Connection.new('localhost', 9595, 3)
+      connection.connect
 
       Timeout.should_receive(:timeout).with(3)
-      conn.should_receive(:process_data).and_return("")
-      conn.read
-      conn.close
+      connection.should_receive(:process_data).and_return("")
+      connection.read
+      connection.close
+    end
+
+    it "defaults to #{VLC::Connection::DEFAULT_READ_TIMEOUT}" do
+      connection = VLC::Connection.new('localhost', 9595, nil)
+      connection.read_timeout.should eq(VLC::Connection::DEFAULT_READ_TIMEOUT)
     end
   end
 
