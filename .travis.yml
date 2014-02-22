@@ -1,8 +1,3 @@
-before_install:
-  #This is a temporary workaround a rubygems bug! Remove later
-  #see: https://github.com/bundler/bundler/issues/2784 & https://github.com/rubygems/rubygems/pull/763
-  - gem update --system 2.1.11
-  - gem --version
 language: ruby
 script: bundle exec rake --verbose --trace
 bundler_args: --without development
