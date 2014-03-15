@@ -19,7 +19,8 @@ module VLC
     # Connects to VLC RC interface on Client#host and Client#port
     def connect
       @socket = TCPSocket.new(@host, @port)
-      2.times { read(0.4) rescue nil } #Clean the reading channel
+      #Channel cleanup: some vlc versions echo two lines of text on connect.
+      2.times { read(0.1) rescue nil }
       true
     rescue Errno::ECONNREFUSED => e
       raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
