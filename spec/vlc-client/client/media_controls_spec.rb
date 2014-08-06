@@ -99,6 +99,20 @@ describe VLC::Client::MediaControls do
       vlc.should be_playing
     end
 
+    it 'may seek' do
+      tcp = tcp_mock
+
+      tcp.should_receive(:puts).once.with('seek 120')
+      tcp.should_receive(:puts).once.with('get_time')
+      tcp.should_receive(:gets).once.and_return('120')
+
+      vlc.connect
+      vlc.play('http://example.org/media.mp3')
+
+      vlc.seek(60 * 2)
+      vlc.time.should eq(120)
+    end
+
     it 'displays the playing media title' do
       tcp = tcp_mock
       tcp.should_receive(:puts).once.with('get_title')

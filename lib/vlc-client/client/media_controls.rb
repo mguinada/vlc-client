@@ -30,6 +30,11 @@ module VLC
         connection.write("pause")
       end
 
+      # Seek in seconds
+      def seek(seconds = 0)
+        connection.write("seek #{seconds.to_i}")
+      end
+
       # Stops media currently playing
       def stop
         connection.write("stop")
