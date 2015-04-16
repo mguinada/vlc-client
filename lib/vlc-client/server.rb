@@ -98,6 +98,13 @@ module VLC
                              :in => 'NUL',
                              :out => 'NUL',
                              :err => 'NUL')
+      elsif (/darwin/ =~ RUBY_PLATFORM) != nil
+        Process.spawn('/Applications/VLC.app/Contents/MacOS/VLC',
+                      '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                      :pgroup => detached,
+                      :in => '/dev/null',
+                      :out => '/dev/null',
+                      :err => '/dev/null')
       else
         Process.spawn(headless? ? 'cvlc' : 'vlc',
                       '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
