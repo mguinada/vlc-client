@@ -90,11 +90,11 @@ vlc.connect
 
 ## Notice
 
-vlc-client has been tested on linux but it should work on any VLC installation as long as the command line is responsive for `vlc` and `cvlc` calls. On Mac OSX these are not available by default. They can be created with:
+vlc-client has been tested on linux but it should work on any VLC installation as long as the command line is responsive for `vlc` and `cvlc` calls. On Mac OS X these are not available by default. They can be created with:
 
 ```
-ln -s /Applications/VLC.app/Contents/MacOS/VLC /usr/local/bin/vlc
-ln -s /Applications/VLC.app/Contents/MacOS/VLC /usr/local/bin/cvlc
+echo "alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'" >> ~/.bash_profile
+echo "alias cvlc='/Applications/VLC.app/Contents/MacOS/VLC'" >> ~/.bash_profile
 ```
 
 VLC media player 2.0.3 seems to [ship with a bug](http://www.linuxquestions.org/questions/slackware-14/problem-vlc-2-0-3-playing-youtube-videos-4175429135) that invalidates YouTube streaming.
