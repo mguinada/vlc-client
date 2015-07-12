@@ -22,8 +22,7 @@ Or install it yourself as:
 
 ```ruby
 
-#Expects a VLC media player running on `192.168.1.10:9999`, e.g. `vlc --extraintf rc --rc-host 192.168.1.10:9999`
-vlc = VLC::Client.new('192.168.1.10', 9999)
+vlc = VLC::Client.new('192.168.1.10', 9999) #Expects a VLC media player running on `192.168.1.10:9999`, e.g. `vlc --extraintf rc --rc-host 192.168.1.10:9999`
 
 vlc.connect # connect to server
 # => true
@@ -46,8 +45,7 @@ Most of the time we want a local client/server VLC media player system
 
 ```ruby
 
-# A client/server system where a local VLC installation is automaticaly managed
-vlc = VLC::System.new
+vlc = VLC::System.new # A client/server system over a local managed VLC instance
 
 vlc.connected? # auto connect
 # => true
@@ -59,23 +57,24 @@ vlc.progress
 # => 1 #%
 #...
 
-#Technically this is the same as
+# Technically this is the same as
 vlc = VLC::Client.new(VLC::Server.new('localhost', 9595, false))
 ```
 
-##### Get local VLC server lifecycle management control
+# Playlist management
 
 ```ruby
-vlc = VLC::System.new('127.0.0.1', 9999, auto_start: false)
 
-vlc.server.running?
-# => false
+vlc = VLC::System.new
 
-vlc.server.start
-# => 12672
+vlc.add_to_playlist('track1.mp3')
+vlc.add_to_playlist('track2.mp3')
 
-vlc.connect
-# => true
+vlc.play
+
+vlc.playlist
+#=> [{:number=>1, :title=>"Track #1 title", :length=>"00:03:10", :times_played=>1}, {:number=>2, :title=>"Track #2 title", :length=>"00:03:30", :times_played=>0}]
+
 ```
 
 ### Reference
@@ -86,7 +85,7 @@ vlc.connect
 
 vlc-client has been tested on linux but it should work on any VLC installation as long as the command line is responsive for `vlc` and `cvlc` calls. On Mac OS X these are not available by default. They can be created with:
 
-```
+```bash
 echo "alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'" >> ~/.bash_profile
 echo "alias cvlc='/Applications/VLC.app/Contents/MacOS/VLC'" >> ~/.bash_profile
 ```
