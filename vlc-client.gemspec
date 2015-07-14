@@ -15,6 +15,4 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = VLC::VERSION
   gem.date          = Time.now.utc.strftime("%Y-%m-%d")
-
-  gem.add_dependency 'retryable', '~> 1.3'
 end

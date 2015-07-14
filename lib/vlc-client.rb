@@ -1,5 +1,3 @@
-require 'retryable'
-
 require 'vlc-client/null_object'
 require 'vlc-client/core_ext/array'
 
@@ -78,10 +76,14 @@ module VLC
       @connection.port = server.port
 
       if options.fetch(:auto_start, true)
+        connection_calls   = 0
+        connection_retries = options.fetch(:conn_retries, 5)
+        options.fetch(:daemonize, false) ? @server.daemonize : @server.start
+
         begin
-          options.fetch(:daemonize, false) ? @server.daemonize : @server.start
-          retryable(:tries => options.fetch(:conn_retries, 5), :on => VLC::ConnectionRefused) { connect }
+          connect
         rescue VLC::ConnectionRefused => e
+          retry if (connection_calls += 1) < connection_retries
           @server.stop
           raise e
         end

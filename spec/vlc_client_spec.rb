@@ -34,6 +34,17 @@ describe VLC::Client do
       vlc = VLC::Client.new(VLC::Server.new('10.0.0.1', 9999), :read_timeout => 3)
       vlc.connection.read_timeout.should eq(3)
     end
+
+    it 'retries to connect on autoconnect failure' do
+      mock_system_calls(:kill => true)
+      num_retries = 3
+
+      TCPSocket.should_receive(:new).exactly(num_retries).times.and_raise(Errno::ECONNREFUSED)
+
+      expect {
+        VLC::Client.new(VLC::Server.new('10.0.0.1', 9898), :conn_retries => num_retries)
+      }.to raise_error(VLC::ConnectionRefused)
+    end
   end
 
   it 'may manage an embedded VLC server' do
