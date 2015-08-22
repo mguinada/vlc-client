@@ -7,7 +7,6 @@ Gem::Specification.new do |gem|
   gem.description   = %q{vlc-client allows to control VLC media player over TCP}
   gem.summary       = %q{vlc-client is a TCP client for VLC media player}
   gem.homepage      = "https://github.com/mguinada/vlc-client"
-
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
