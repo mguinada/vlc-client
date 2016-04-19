@@ -19,8 +19,7 @@ module VLC
     # Connects to VLC RC interface on Client#host and Client#port
     def connect
       @socket = TCPSocket.new(@host, @port)
-      #Channel cleanup: some vlc versions echo two lines of text on connect.
-      2.times { read(0.1) rescue nil }
+      2.times { read(0.1) rescue nil } #Channel cleanup: some vlc versions echo two lines of text on connect.
       true
     rescue Errno::ECONNREFUSED => e
       raise VLC::ConnectionRefused, "Could not connect to #{@host}:#{@port}: #{e}"
@@ -31,7 +30,7 @@ module VLC
     # @return [Boolean] true is connected, false otherwise
     #
     def connected?
-      not(@socket.nil?)
+      not @socket.nil?
     end
 
     # Disconnects from VLC RC interface
@@ -52,6 +51,7 @@ module VLC
     #
     def write(data, fire_and_forget = true)
       raise NotConnectedError, "no connection to server" unless connected?
+
       @socket.puts(data)
       @socket.flush
 

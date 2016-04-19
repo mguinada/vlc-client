@@ -17,7 +17,7 @@ module VLC
       # @param media [String, File, URI] the media to be played
       #
       def add_to_playlist(media)
-        connection.write("enqueue #{media_arg(media)}")
+        connection.write("enqueue #{media(media)}")
       end
 
       # Lists tracks on the playlist
@@ -47,7 +47,8 @@ module VLC
         connection.write("clear")
       end
 
-    private
+      private
+
       def parse_playlist(list)
         list.map do |item|
           match = item.match(LIST_ITEM_REGEXP)

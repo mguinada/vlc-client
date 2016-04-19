@@ -1,19 +1,8 @@
 module VLC
-  # Root error class
-  class Error < StandardError; end
-
-  # Raised on connection refusal
-  class ConnectionRefused < Error; end
-
-  # Raised on communication errors
-  class ProtocolError < Error; end
-
-  # Raised on a write to a broken connection
-  class BrokenConnectionError < Error; end
-
-  # Raised on a write to a disconnected connection
-  class NotConnectedError < Error; end
-
-  # Raised on a read timeout
-  class ReadTimeoutError < Error; end
+  Error                 = Class.new(StandardError) # Root error class
+  ConnectionRefused     = Class.new(Error)         # Raised on connection refusal
+  NotConnectedError     = Class.new(Error)         # Raised on a write to a disconnected connection
+  BrokenConnectionError = Class.new(Error)         # Raised on a write to a broken connection
+  ProtocolError         = Class.new(Error)         # Raised on communication errors
+  ReadTimeoutError      = Class.new(Error)         # Raised on a read timeout
 end

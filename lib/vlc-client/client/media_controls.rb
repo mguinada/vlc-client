@@ -22,7 +22,7 @@ module VLC
       #     vlc.play #resume playback
       #
       def play(media = nil)
-        connection.write(media.nil? ? "play" : "add #{media_arg(media)}")
+        connection.write(media.nil? ? "play" : "add #{media(media)}")
       end
 
       # Pauses playback

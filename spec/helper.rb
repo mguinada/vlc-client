@@ -44,7 +44,7 @@ module Mocks
       Process.should_receive(:spawn).once.and_return(99)
     end
 
-    Process.should_receive(:kill).once.with('INT', 99) if opts.fetch(:kill, true)
+    Process.should_receive(:kill).once.with('SIGTERM', 99) if opts.fetch(:kill, true)
   end
 
   def mock_file(filename)

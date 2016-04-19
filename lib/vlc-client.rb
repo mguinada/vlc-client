@@ -70,7 +70,8 @@ module VLC
       bind_server(server, options) unless server.nil?
     end
 
-  private
+    private
+
     def bind_server(server, options = {})
       @connection.host = server.host
       @connection.port = server.port
@@ -83,7 +84,11 @@ module VLC
         begin
           connect
         rescue VLC::ConnectionRefused => e
-          retry if (connection_calls += 1) < connection_retries
+          if (connection_calls += 1) < connection_retries
+            sleep(0.5)
+            retry
+          end
+
           @server.stop
           raise e
         end
@@ -98,19 +103,20 @@ module VLC
         @host = args.first.to_s
         @port = Integer(args.last)
       else
-        @host, @port = 'localhost', 9595
+        @host = 'localhost'
+        @port = 9595
       end
       args
     end
 
-    def media_arg(media)
+    def media(media)
       case media
       when File
         media.path
       when String, URI
         media
       else
-        raise ArgumentError, "Can not play: #{media}"
+        raise ArgumentError, "Can not play #{media}"
       end
     end
   end
