@@ -38,6 +38,7 @@ module VLC
         server.host = args.first.to_s
         server.port = Integer(args.last)
       end
+
       @client = VLC::Client.new(server, opts)
     end
 
@@ -49,7 +50,8 @@ module VLC
       client.respond_to?(method, private_methods) || super(method, private_methods)
     end
 
-  protected
+    protected
+
     # Delegate to VLC::Client
     #
     def method_missing(method, *args, &block)

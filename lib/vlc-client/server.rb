@@ -23,7 +23,7 @@ module VLC
     # @return [Boolean] true is VLC is running, false otherwise
     #
     def running?
-      not(@pid.nil?)
+      not @pid.nil?
     end
 
     alias :started? :running?
@@ -33,7 +33,7 @@ module VLC
     # @return [Boolean] true is VLC is stopped, false otherwise
     #
     def stopped?
-      not(running?)
+      not running?
     end
 
     # Starts a VLC instance in a subprocess
@@ -47,17 +47,13 @@ module VLC
     #
     def start(detached = false)
       return @pid if running?
+
       detached ? @deamon = true : setup_traps
 
-      @pid = if RUBY_VERSION >= '1.9'
-               process_spawn(detached)
-             else
-               process_spawn_ruby_1_8(detached)
-             end
+      @pid = RUBY_VERSION >= '1.9' ? process_spawn(detached) : process_spawn_ruby_1_8(detached)
     end
 
     # Start a VLC instance as a system deamon
-    #
     #
     # @return [Integer] the subprocess PID or nil if the start command
     #                     as no effect (e.g. VLC already running)
@@ -83,22 +79,25 @@ module VLC
     def stop
       return nil if stopped?
 
-      Process.kill('INT', pid = @pid)
+      Process.kill('SIGTERM', pid = @pid)
       @pid = NullObject.new
       @deamon = false
+
       pid
     end
 
-  private
+    private
+
     def process_spawn(detached)
-      if ENV['OS'] == 'Windows_NT'
+      case
+      when ENV['OS'] == 'Windows_NT'
         # We don't have pgroup, and should write to NUL in case the env doesn't simulate /dev/null
         Process.spawn(headless? ? 'cvlc' : 'vlc',
-                             '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
-                             :in => 'NUL',
-                             :out => 'NUL',
-                             :err => 'NUL')
-      elsif (/darwin/ =~ RUBY_PLATFORM) != nil
+                      '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                      :in => 'NUL',
+                      :out => 'NUL',
+                      :err => 'NUL')
+      when /darwin/ =~ RUBY_PLATFORM
         Process.spawn('/Applications/VLC.app/Contents/MacOS/VLC',
                       '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
                       :pgroup => detached,
@@ -118,6 +117,7 @@ module VLC
     # For ruby 1.8
     def process_spawn_ruby_1_8(detached)
       rd, wr = IO.pipe
+
       if Process.fork      #parent
         wr.close
         pid = rd.read.to_i
@@ -158,7 +158,7 @@ module VLC
     end
 
     def detach
-     if RUBY_VERSION < "1.9"
+      if RUBY_VERSION < "1.9"
         Process.setsid
         exit if Process.fork
         Dir.chdir "/"
