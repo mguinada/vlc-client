@@ -3,6 +3,14 @@ require 'uri'
 module VLC
   class Client
     module MediaControls
+      # Expressions for parsing VLC's "status" command
+      # @api private
+      STATUS_MAPPING = {
+        file: /\( new input: file:\/\/(.*) \)/,
+        volume: /\( audio volume: (\d+) \)/,
+        state: /\( state (.*) \)/ ,
+      }.freeze
+
       # Plays media or resumes playback
       #
       # @overload play(media)
@@ -104,6 +112,21 @@ module VLC
       # @see #volume
       def volume=(level)
         volume(level)
+      end
+
+      # @return [Hash{Symbol => String}] the mapping of status strings
+      # @example
+      #  status = vlc.status
+      #  status[:file] # => "/path/to/file/playing.mp3"
+      #  status[:volume] # => "256"
+      #  status[:state] # => "playing"
+      def status
+        connection.write("status")
+        raw_status = 3.times.collect { connection.read }
+
+        STATUS_MAPPING.keys.zip(raw_status).map do |k, s|
+          [k, STATUS_MAPPING[k].match(s)[1]]
+        end.to_h
       end
     end
   end
