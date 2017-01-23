@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rake'
+gem 'rake', '< 11.0'
 
 group :development do
   gem 'guard-rspec', '~> 2.5.1'
