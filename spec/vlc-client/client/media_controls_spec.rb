@@ -180,20 +180,20 @@ describe VLC::Client::MediaControls do
     end
 
     it 'is aware of track progress' do
-      vlc.stub(:length).and_return { 0 }
-      vlc.stub(:time).and_return { 100 }
+      vlc.stub(:length).and_return(0)
+      vlc.stub(:time).and_return(0)
       vlc.progress.should eq(0)
 
-      vlc.stub(:length).and_return { 100 }
-      vlc.stub(:time).and_return { 0 }
+      vlc.stub(:length).and_return(100)
+      vlc.stub(:time).and_return(0)
       vlc.progress.should eq(0)
 
-      vlc.stub(:length).and_return { 100 }
-      vlc.stub(:time).and_return { 10 }
+      vlc.stub(:length).and_return(100)
+      vlc.stub(:time).and_return(10)
       vlc.progress.should eq(10)
 
-      vlc.stub(:length).and_return { 100 }
-      vlc.stub(:time).and_return { 100 }
+      vlc.stub(:length).and_return(100)
+      vlc.stub(:time).and_return(100)
       vlc.progress.should eq(100)
     end
   end

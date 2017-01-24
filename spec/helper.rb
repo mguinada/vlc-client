@@ -16,7 +16,7 @@ require File.expand_path('../../lib/vlc-client', __FILE__)
 module Mocks
   def mock_tcp_server(opts = {})
     tcp = double()
-    TCPSocket.stub(:new).and_return do
+    TCPSocket.stub(:new) do
       if opts.fetch(:defaults, true)
         tcp.stub(:flush)
         tcp.should_receive(:gets).with(no_args).at_least(:twice).and_return("")
@@ -48,7 +48,7 @@ module Mocks
   end
 
   def mock_file(filename)
-    File.stub(:open).and_return do
+    File.stub(:open) do
       f = File.new('./README.md', 'r')
       f.should_receive(:path).once.and_return(filename)
       f
