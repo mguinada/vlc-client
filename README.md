@@ -1,6 +1,6 @@
 # vlc-client [![Build Status](https://secure.travis-ci.org/mguinada/vlc-client.png?branch=master)](http://travis-ci.org/mguinada/vlc-client)
 
-vlc-client manages a [VLC media player](http://www.videolan.org/vlc/) instance through it's RC interface.
+vlc-client manages a [VLC media player](http://www.videolan.org/vlc/) instance through its RC interface.
 
 ### Installation
 
@@ -40,7 +40,7 @@ vlc.fullscreen
 ```
 
 ##### Create a self managed client/server system.
-Most of the time we want a local client/server VLC media player system
+If you need a local client/server VLC media player system
 
 
 ```ruby
@@ -97,7 +97,7 @@ echo "alias cvlc='/Applications/VLC.app/Contents/MacOS/VLC'" >> ~/.bash_profile
 3. Add/change specs for your unimplemented feature or bug fix
 4. Hack it
 5. Make sure specs pass (`bundle exec rake spec`)
-6. Edit the documentation so it is coherent with your feature or fix. Run `bundle exec rake yard` to review
+6. Edit the documentation in coherence with your feature or fixes. Run `bundle exec rake yard` to review
 7. Commit changes (`git commit -am 'Add some feature/fix'`) and push to the branch (`git push origin my-topic-branch`)
 8. Submit a pull request
 
